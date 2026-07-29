@@ -1,0 +1,121 @@
+.section {
+  margin-bottom: var(--section-gap);
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4.5vw, 48px);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ice-highlight);
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+
+.subheading {
+  font-size: 16px;
+  color: var(--color-fog-veil);
+  max-width: 520px;
+  margin: 0 auto 48px;
+  line-height: 1.6;
+}
+
+.tableWrapper {
+  max-width: 880px;
+  margin: 0 auto;
+  overflow-x: auto;
+  border-radius: var(--radius-cards);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th,
+.table td {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--color-glass-edge);
+}
+
+.table th {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-moon-mist);
+  background: rgba(140, 170, 220, 0.02);
+}
+
+.featureHeader {
+  width: 30%;
+}
+
+.othersHeader {
+  width: 35%;
+  color: var(--color-fog-veil);
+}
+
+.fetchHeader {
+  width: 35%;
+  background: var(--color-accent-soft) !important;
+}
+
+.fetchBrand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-pure-white);
+  font-family: var(--font-display);
+  font-size: 16px;
+}
+
+.sparkleIcon {
+  color: var(--color-accent);
+}
+
+.row:hover {
+  background: rgba(140, 170, 220, 0.02);
+}
+
+.featureCell {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-pure-white);
+  font-size: 14px;
+}
+
+.othersCell {
+  color: var(--color-fog-veil);
+  font-size: 13.5px;
+}
+
+.fetchCell {
+  color: var(--color-frost-glow);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  background: rgba(124, 106, 239, 0.04);
+}
+
+.cellContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badIcon {
+  color: var(--color-ember-glow);
+  flex-shrink: 0;
+}
+
+.goodIcon {
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .table th,
+  .table td {
+    padding: 14px 16px;
+    font-size: 12.5px;
+  }
+}

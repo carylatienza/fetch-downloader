@@ -13,22 +13,25 @@
   border-radius: var(--radius-full);
   padding: 6px 8px 6px 16px;
   box-shadow: var(--shadow-frosted-card);
-  transition: all 0.2s ease;
+  transition: all var(--duration-normal) var(--ease-spring);
 }
 
 .inputWrapper:focus-within {
-  border-color: rgba(102, 58, 243, 0.6);
-  box-shadow: 0 0 20px rgba(102, 58, 243, 0.25), inset 0 1px 1px rgba(216, 236, 248, 0.2);
+  border-color: rgba(124, 106, 239, 0.4);
+  box-shadow:
+    0 0 24px var(--color-accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .hasError {
-  border-color: rgba(228, 109, 76, 0.6);
+  border-color: rgba(212, 101, 74, 0.5);
 }
 
 .iconPrefix {
   color: var(--color-moon-mist);
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .input {
@@ -37,14 +40,15 @@
   border: none;
   outline: none;
   color: var(--color-pure-white);
-  font-family: var(--font-untitled-sans);
+  font-family: var(--font-body);
   font-size: 15px;
   padding: 8px 0;
+  min-width: 0;
 }
 
 .input::placeholder {
   color: var(--color-moon-mist);
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .clearBtn {
@@ -56,7 +60,7 @@
   display: flex;
   align-items: center;
   border-radius: 50%;
-  transition: color 0.2s;
+  transition: color var(--duration-fast) var(--ease-spring);
 }
 
 .clearBtn:hover {
@@ -64,19 +68,20 @@
 }
 
 .pasteBtn {
-  background: rgba(186, 214, 247, 0.08);
+  background: rgba(140, 170, 220, 0.06);
   border: 1px solid var(--color-glass-edge);
   color: var(--color-moon-mist);
   padding: 4px 10px;
   border-radius: var(--radius-full);
   font-size: 12px;
   cursor: pointer;
-  font-family: var(--font-untitled-sans);
-  transition: all 0.2s;
+  font-family: var(--font-body);
+  transition: all var(--duration-normal) var(--ease-spring);
+  flex-shrink: 0;
 }
 
 .pasteBtn:hover {
-  background: rgba(186, 214, 247, 0.15);
+  background: rgba(140, 170, 220, 0.12);
   color: var(--color-pure-white);
 }
 
@@ -85,4 +90,56 @@
   font-size: 13px;
   margin-top: 10px;
   text-align: center;
+}
+
+.samplesRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.samplesLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--color-fog-veil);
+  opacity: 0.8;
+}
+
+.samplesGroup {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sampleChip {
+  background: rgba(140, 170, 220, 0.04);
+  border: 1px solid var(--color-glass-edge);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-moon-mist);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  transition: all var(--duration-normal) var(--ease-spring);
+}
+
+.sampleChip:hover {
+  background: rgba(140, 170, 220, 0.1);
+  color: var(--color-pure-white);
+  border-color: var(--color-glass-edge-strong);
+  transform: translateY(-1px);
+}
+
+.sampleChip:active {
+  transform: translateY(0) scale(0.97);
 }

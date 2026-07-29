@@ -3,12 +3,13 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 28px;
 }
 
 .label {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--color-fog-veil);
+  opacity: 0.75;
 }
 
 .badgeRow {
@@ -20,7 +21,7 @@
 }
 
 .badge {
-  background: rgba(186, 214, 247, 0.04);
+  background: rgba(140, 170, 220, 0.03);
   border: 1px solid var(--color-glass-edge);
   border-radius: var(--radius-full);
   padding: 6px 14px;
@@ -29,11 +30,63 @@
   gap: 8px;
   font-size: 13px;
   color: var(--color-moon-mist);
-  transition: all 0.2s ease;
+  cursor: default;
+  transition: all var(--duration-normal) var(--ease-spring);
+  position: relative;
 }
 
-.badge:hover {
-  background: rgba(186, 214, 247, 0.08);
+.badgeName {
+  font-weight: var(--font-weight-medium);
+}
+
+.badgeDetail {
+  font-size: 11px;
+  color: var(--color-fog-veil);
+  opacity: 0.65;
+  padding-left: 4px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  transition: opacity 0.2s ease;
+}
+
+/* Platform Brand Glow Hover Effects */
+.ytGlow:hover {
+  background: rgba(255, 0, 0, 0.08);
+  border-color: rgba(255, 0, 0, 0.4);
+  box-shadow: 0 0 16px rgba(255, 0, 0, 0.25);
   color: var(--color-pure-white);
-  border-color: rgba(186, 215, 247, 0.25);
+  transform: translateY(-2px);
+}
+
+.fbGlow:hover {
+  background: rgba(24, 119, 242, 0.08);
+  border-color: rgba(24, 119, 242, 0.4);
+  box-shadow: 0 0 16px rgba(24, 119, 242, 0.25);
+  color: var(--color-pure-white);
+  transform: translateY(-2px);
+}
+
+.igGlow:hover {
+  background: rgba(228, 64, 95, 0.08);
+  border-color: rgba(228, 64, 95, 0.4);
+  box-shadow: 0 0 16px rgba(228, 64, 95, 0.25);
+  color: var(--color-pure-white);
+  transform: translateY(-2px);
+}
+
+.xGlow:hover {
+  background: rgba(29, 161, 242, 0.08);
+  border-color: rgba(29, 161, 242, 0.4);
+  box-shadow: 0 0 16px rgba(29, 161, 242, 0.25);
+  color: var(--color-pure-white);
+  transform: translateY(-2px);
+}
+
+.badge:hover .badgeDetail {
+  opacity: 0.9;
+}
+
+@media (max-width: 640px) {
+  .badgeDetail {
+    display: none;
+  }
 }

@@ -1,15 +1,15 @@
-import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
+import { Sora, Outfit, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
-const spaceGrotesk = Space_Grotesk({
+const sora = Sora({
   subsets: ['latin'],
-  variable: '--font-space-grotesk',
+  variable: '--font-sora',
   display: 'swap',
 });
 
-const inter = Inter({
+const outfit = Outfit({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-outfit',
   display: 'swap',
 });
 
@@ -33,9 +33,10 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${sora.variable} ${outfit.variable} ${jetbrainsMono.variable}`}
     >
       <body>
+        <div className="bg-noise" aria-hidden="true" />
         <div className="bg-atmosphere" />
         <div className="bg-spotlight" />
         <div style={{ position: 'relative', zIndex: 1, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

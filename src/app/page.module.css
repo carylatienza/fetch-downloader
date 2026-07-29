@@ -3,29 +3,60 @@
   width: 100%;
   max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: 60px 24px var(--section-gap);
+  padding: 0 24px var(--section-gap);
 }
 
+/* ─── Hero ─── */
 .heroSection {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  margin-bottom: var(--section-gap);
+  padding-top: 80px;
+}
+
+.heroInner {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.featureBadge {
+  background: var(--color-accent-soft);
+  border: 1px solid rgba(124, 106, 239, 0.25);
+  color: var(--color-blueprint-blue);
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.02em;
+}
+
+.badgeSparkle {
+  color: var(--color-accent);
 }
 
 .title {
-  font-family: var(--font-aeonikpro);
-  font-size: clamp(64px, 10vw, 120px);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: -0.03em;
-  line-height: 1;
-  margin-bottom: 20px;
+  font-family: var(--font-display);
+  font-size: clamp(72px, 12vw, 140px);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  margin-bottom: 24px;
+  text-wrap: balance;
 }
 
 .subheadline {
-  font-size: clamp(16px, 2vw, 18px);
+  font-size: clamp(16px, 2vw, 19px);
   color: var(--color-fog-veil);
-  max-width: 640px;
-  margin: 0 auto 40px;
-  line-height: 1.5;
+  max-width: 560px;
+  margin: 0 auto 44px;
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .inputArea {
@@ -33,65 +64,139 @@
   z-index: 10;
 }
 
-.featureSection {
+/* ─── Steps Timeline ─── */
+.stepsSection {
   margin-bottom: var(--section-gap);
   text-align: center;
 }
 
 .sectionHeading {
-  font-family: var(--font-aeonikpro);
-  font-size: clamp(28px, 4vw, 44px);
-  font-weight: var(--font-weight-medium);
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4.5vw, 48px);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-ice-highlight);
-  margin-bottom: 48px;
+  letter-spacing: -0.03em;
+  margin-bottom: 56px;
+  text-wrap: balance;
 }
 
-.stepsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
+.stepsTimeline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
-.iconCircle {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(186, 214, 247, 0.06);
-  border: 1px solid var(--color-glass-edge);
+.step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 16px;
+  position: relative;
+}
+
+.stepNumber {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.04em;
+  color: var(--color-glass-edge-strong);
+  line-height: 1;
+  margin-bottom: 20px;
+  user-select: none;
+}
+
+.stepContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.stepIconWrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--color-accent-soft);
+  border: 1px solid rgba(124, 106, 239, 0.15);
   color: var(--color-blueprint-blue);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 20px;
+  margin-bottom: 4px;
 }
 
 .stepTitle {
-  font-family: var(--font-untitled-sans);
-  font-size: 18px;
+  font-family: var(--font-body);
+  font-size: 17px;
   font-weight: var(--font-weight-semibold);
   color: var(--color-pure-white);
-  margin-bottom: 8px;
 }
 
 .stepDesc {
   font-size: 14px;
   color: var(--color-fog-veil);
-  line-height: 1.5;
+  line-height: 1.6;
+  max-width: 240px;
 }
 
-.featuresGrid {
+.stepConnector {
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-glass-edge-strong), transparent);
+  margin-top: 76px;
+  flex-shrink: 0;
+}
+
+/* ─── Features — Asymmetric Bento ─── */
+.featuresSection {
+  margin-bottom: var(--section-gap);
+  text-align: center;
+}
+
+.bentoGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 880px;
+  margin: 0 auto;
   text-align: left;
 }
 
+.bentoHero {
+  grid-column: span 2;
+}
+
+.bentoCard {
+  grid-column: span 1;
+}
+
+.bentoInner {
+  padding: 32px 28px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  border-radius: calc(var(--radius-cards) - 2px);
+  background: var(--surface-steel-plate);
+}
+
+.bentoCard .bentoInner {
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px 24px;
+  min-height: 200px;
+}
+
 .featureIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(102, 58, 243, 0.15);
-  border: 1px solid rgba(102, 58, 243, 0.3);
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--color-accent-soft);
+  border: 1px solid rgba(124, 106, 239, 0.15);
   color: var(--color-blueprint-blue);
   display: flex;
   align-items: center;
@@ -100,7 +205,7 @@
 }
 
 .featureTitle {
-  font-family: var(--font-untitled-sans);
+  font-family: var(--font-body);
   font-size: 18px;
   font-weight: var(--font-weight-semibold);
   color: var(--color-pure-white);
@@ -110,5 +215,49 @@
 .featureDesc {
   font-size: 14px;
   color: var(--color-fog-veil);
-  line-height: 1.5;
+  line-height: 1.6;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .main {
+    padding: 0 16px var(--section-gap);
+  }
+
+  .heroSection {
+    min-height: auto;
+    padding-top: 100px;
+    padding-bottom: 60px;
+  }
+
+  .stepsTimeline {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stepConnector {
+    width: 1px;
+    height: 32px;
+    margin-top: 0;
+    background: linear-gradient(180deg, transparent, var(--color-glass-edge-strong), transparent);
+  }
+
+  .stepNumber {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .bentoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bentoHero {
+    grid-column: span 1;
+  }
+
+  .bentoHero .bentoInner {
+    flex-direction: column;
+    gap: 16px;
+  }
 }
