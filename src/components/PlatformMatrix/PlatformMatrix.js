@@ -1,5 +1,13 @@
-import { Youtube, Facebook, Instagram, Twitter, Video, Image, Film, Archive, Check } from 'lucide-react';
+import { Youtube, Facebook, Instagram, Check } from 'lucide-react';
 import styles from './PlatformMatrix.module.css';
+
+function XIcon({ size = 22, style }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={style}>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
 
 const PLATFORM_DATA = [
   {
@@ -44,8 +52,8 @@ const PLATFORM_DATA = [
   {
     id: 'twitter',
     name: 'X (Twitter)',
-    icon: Twitter,
-    color: '#1DA1F2',
+    icon: XIcon,
+    color: '#F4F4F5',
     description: 'Download 1080p tweet videos, multi-image tweets, and GIFs.',
     features: [
       { name: '1080p Tweet Video MP4', supported: true },
@@ -74,7 +82,7 @@ export default function PlatformMatrix() {
         {PLATFORM_DATA.map(({ id, name, icon: Icon, color, description, features }) => (
           <div key={id} className={`${styles.card} glass-panel reveal`}>
             <div className={styles.cardHeader}>
-              <div className={styles.iconWrap} style={{ background: `${color}15`, borderColor: `${color}30` }}>
+              <div className={styles.iconWrap} style={{ background: `${color}18`, borderColor: `${color}35` }}>
                 <Icon size={22} style={{ color }} />
               </div>
               <div>

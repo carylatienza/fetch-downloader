@@ -113,7 +113,7 @@ export default function HomePage() {
             <div className={styles.inputArea}>
               <UrlInput onSubmit={handleExtract} isLoading={status === 'loading'} initialValue={currentUrl} />
 
-              {status === 'idle' && <PlatformBadges />}
+              {status === 'idle' && <PlatformBadges onSelectSample={handleExtract} />}
               {status === 'loading' && <LoadingState />}
               {status === 'success' && extractedData && (
                 <PreviewCard data={extractedData} onReset={handleReset} />

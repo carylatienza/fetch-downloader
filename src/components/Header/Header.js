@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { ArrowDownToLine, Github } from 'lucide-react';
+import Image from 'next/image';
+import { Github } from 'lucide-react';
 import styles from './Header.module.css';
 
 export default function Header() {
@@ -8,7 +9,13 @@ export default function Header() {
       <div className={styles.container}>
         <Link href="/" className={styles.logo}>
           <div className={styles.logoIcon}>
-            <ArrowDownToLine size={20} />
+            <Image
+              src="/images/logo.png"
+              alt="Fetch Logo"
+              width={28}
+              height={28}
+              className={styles.logoImage}
+            />
           </div>
           <span className={styles.logoText}>Fetch</span>
         </Link>

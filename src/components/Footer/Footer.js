@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowDownToLine } from 'lucide-react';
+import Image from 'next/image';
 import styles from './Footer.module.css';
 
 export default function Footer() {
@@ -9,7 +9,13 @@ export default function Footer() {
         <div className={styles.topRow}>
           <Link href="/" className={styles.logo}>
             <div className={styles.logoIcon}>
-              <ArrowDownToLine size={14} />
+              <Image
+                src="/images/logo.png"
+                alt="Fetch Logo"
+                width={22}
+                height={22}
+                className={styles.logoImage}
+              />
             </div>
             <span>Fetch</span>
           </Link>

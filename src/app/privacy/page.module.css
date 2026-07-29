@@ -3,7 +3,7 @@
   width: 100%;
   max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: 60px 24px var(--section-gap);
+  padding: 120px 24px var(--section-gap);
 }
 
 .headline {
