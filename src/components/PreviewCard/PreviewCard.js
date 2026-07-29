@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Download, Film, Image as ImageIcon, Check, RefreshCw, Clock, HardDrive, ChevronLeft, ChevronRight, Archive } from 'lucide-react';
+import { Download, Film, Image as ImageIcon, Check, RefreshCw, Clock, HardDrive, ChevronLeft, ChevronRight, Archive, ArrowLeft } from 'lucide-react';
 import styles from './PreviewCard.module.css';
 
 function formatDuration(seconds) {
@@ -232,7 +232,8 @@ export default function PreviewCard({ data, onReset }) {
         )}
 
         <button onClick={onReset} className={styles.resetBtn}>
-          ← Download another URL
+          <ArrowLeft size={14} />
+          <span>Download another URL</span>
         </button>
       </div>
     </div>
