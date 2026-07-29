@@ -1,0 +1,51 @@
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 60px 24px var(--section-gap);
+}
+
+.headline {
+  font-family: var(--font-aeonikpro);
+  font-size: clamp(36px, 5vw, 48px);
+  color: var(--color-ice-highlight);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.lastUpdated {
+  font-size: 14px;
+  color: var(--color-fog-veil);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.sectionTitle {
+  font-family: var(--font-untitled-sans);
+  font-size: 18px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-pure-white);
+  margin: 24px 0 12px;
+}
+
+.sectionTitle:first-child {
+  margin-top: 0;
+}
+
+.text {
+  font-size: 15px;
+  color: var(--color-fog-veil);
+  line-height: 1.6;
+}
+
+.list {
+  padding-left: 20px;
+  color: var(--color-fog-veil);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.list li {
+  margin-bottom: 6px;
+}

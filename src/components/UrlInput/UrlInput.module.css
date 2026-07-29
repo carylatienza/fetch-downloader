@@ -1,0 +1,88 @@
+.form {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-deep-glass);
+  border: 1px solid var(--color-glass-edge);
+  border-radius: var(--radius-full);
+  padding: 6px 8px 6px 16px;
+  box-shadow: var(--shadow-frosted-card);
+  transition: all 0.2s ease;
+}
+
+.inputWrapper:focus-within {
+  border-color: rgba(102, 58, 243, 0.6);
+  box-shadow: 0 0 20px rgba(102, 58, 243, 0.25), inset 0 1px 1px rgba(216, 236, 248, 0.2);
+}
+
+.hasError {
+  border-color: rgba(228, 109, 76, 0.6);
+}
+
+.iconPrefix {
+  color: var(--color-moon-mist);
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-pure-white);
+  font-family: var(--font-untitled-sans);
+  font-size: 15px;
+  padding: 8px 0;
+}
+
+.input::placeholder {
+  color: var(--color-moon-mist);
+  opacity: 0.6;
+}
+
+.clearBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-fog-veil);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  transition: color 0.2s;
+}
+
+.clearBtn:hover {
+  color: var(--color-pure-white);
+}
+
+.pasteBtn {
+  background: rgba(186, 214, 247, 0.08);
+  border: 1px solid var(--color-glass-edge);
+  color: var(--color-moon-mist);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  cursor: pointer;
+  font-family: var(--font-untitled-sans);
+  transition: all 0.2s;
+}
+
+.pasteBtn:hover {
+  background: rgba(186, 214, 247, 0.15);
+  color: var(--color-pure-white);
+}
+
+.errorText {
+  color: var(--color-ember-glow);
+  font-size: 13px;
+  margin-top: 10px;
+  text-align: center;
+}

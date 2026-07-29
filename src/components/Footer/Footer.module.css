@@ -1,0 +1,92 @@
+.footer {
+  width: 100%;
+  border-top: 1px solid var(--color-glass-edge);
+  background: rgba(5, 6, 15, 0.9);
+  padding: 60px 24px 40px;
+  margin-top: auto;
+}
+
+.container {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--color-pure-white);
+  font-family: var(--font-aeonikpro);
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.logoIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(102, 58, 243, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-blueprint-blue);
+}
+
+.tagline {
+  color: var(--color-fog-veil);
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 320px;
+  margin-bottom: 20px;
+}
+
+.copyright {
+  color: var(--color-fog-veil);
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.colTitle {
+  font-family: var(--font-dotdigital);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--color-moon-mist);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.linksCol {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.link {
+  color: var(--color-fog-veil);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: var(--color-pure-white);
+}
+
+.textMuted {
+  color: var(--color-fog-veil);
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr 1fr;
+  }
+  .brandCol {
+    grid-column: span 2;
+  }
+}

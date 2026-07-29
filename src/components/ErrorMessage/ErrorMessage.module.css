@@ -1,0 +1,82 @@
+.card {
+  background: var(--surface-deep-glass);
+  border: 1px solid rgba(228, 109, 76, 0.3);
+  border-radius: var(--radius-cards);
+  padding: 32px 24px;
+  max-width: 520px;
+  margin: 32px auto 0;
+  text-align: center;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.3s ease;
+}
+
+.iconContainer {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(228, 109, 76, 0.12);
+  color: var(--color-ember-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.title {
+  font-family: var(--font-untitled-sans);
+  font-size: 18px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-pure-white);
+  margin-bottom: 8px;
+}
+
+.message {
+  font-size: 14px;
+  color: var(--color-fog-veil);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.platformList {
+  margin: 16px 0;
+}
+
+.platformHeader {
+  font-size: 12px;
+  color: var(--color-moon-mist);
+  margin-bottom: 8px;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.tag {
+  background: var(--color-luminous-fill);
+  border: 1px solid var(--color-glass-edge);
+  color: var(--color-frost-glow);
+  padding: 4px 10px;
+  border-radius: var(--radius-badges);
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.retryNotice {
+  font-size: 13px;
+  color: var(--color-moon-mist);
+  margin-bottom: 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

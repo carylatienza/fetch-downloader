@@ -1,0 +1,114 @@
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 60px 24px var(--section-gap);
+}
+
+.heroSection {
+  text-align: center;
+  margin-bottom: var(--section-gap);
+}
+
+.title {
+  font-family: var(--font-aeonikpro);
+  font-size: clamp(64px, 10vw, 120px);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.subheadline {
+  font-size: clamp(16px, 2vw, 18px);
+  color: var(--color-fog-veil);
+  max-width: 640px;
+  margin: 0 auto 40px;
+  line-height: 1.5;
+}
+
+.inputArea {
+  position: relative;
+  z-index: 10;
+}
+
+.featureSection {
+  margin-bottom: var(--section-gap);
+  text-align: center;
+}
+
+.sectionHeading {
+  font-family: var(--font-aeonikpro);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-ice-highlight);
+  margin-bottom: 48px;
+}
+
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.iconCircle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(186, 214, 247, 0.06);
+  border: 1px solid var(--color-glass-edge);
+  color: var(--color-blueprint-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.stepTitle {
+  font-family: var(--font-untitled-sans);
+  font-size: 18px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-pure-white);
+  margin-bottom: 8px;
+}
+
+.stepDesc {
+  font-size: 14px;
+  color: var(--color-fog-veil);
+  line-height: 1.5;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  text-align: left;
+}
+
+.featureIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(102, 58, 243, 0.15);
+  border: 1px solid rgba(102, 58, 243, 0.3);
+  color: var(--color-blueprint-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.featureTitle {
+  font-family: var(--font-untitled-sans);
+  font-size: 18px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-pure-white);
+  margin-bottom: 6px;
+}
+
+.featureDesc {
+  font-size: 14px;
+  color: var(--color-fog-veil);
+  line-height: 1.5;
+}

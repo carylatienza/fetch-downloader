@@ -1,0 +1,237 @@
+:root {
+  /* Colors */
+  --color-midnight-canvas: #05060f;
+  --color-steel-plate: #2f343e;
+  --color-fog-veil: #9da7ba;
+  --color-moon-mist: #c7d3ea;
+  --color-frost-glow: #d1e4fa;
+  --color-ice-highlight: #d8ecf8;
+  --gradient-ice-highlight: linear-gradient(180deg, #d8ecf8 0%, #98c0ef 100%);
+  --color-pure-white: #ffffff;
+  --color-void-violet: #663af3;
+  --color-blueprint-blue: #b6d9fc;
+  --color-ember-glow: #e46d4c;
+  --color-signal-blue: #027dea;
+  --color-deep-teal: #269684;
+  --color-gridline-blue: #3f4959;
+  --color-glass-edge: rgba(186, 215, 247, 0.12);
+  --color-luminous-fill: rgba(199, 211, 234, 0.12);
+
+  /* Typography — Font Families (mapped to Next.js font variables) */
+  --font-untitled-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-aeonikpro: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-dotdigital: var(--font-jetbrains-mono), monospace;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.33;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.43;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --tracking-body: -0.16px;
+  --text-subheading: 18px;
+  --leading-subheading: 1.33;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.17;
+  --tracking-heading-sm: -0.24px;
+  --text-heading: 28px;
+  --leading-heading: 1.14;
+  --text-heading-lg: 44px;
+  --leading-heading-lg: 1.16;
+  --text-display: 48px;
+  --leading-display: 1.17;
+
+  /* Typography — Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-56: 56px;
+  --spacing-100: 100px;
+  --spacing-120: 120px;
+
+  /* Layout */
+  --page-max-width: 1200px;
+  --section-gap: 120px;
+  --card-padding: 24px;
+
+  /* Border Radius */
+  --radius-sm: 2px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 999px;
+
+  /* Named Radii */
+  --radius-cards: 16px;
+  --radius-badges: 6px;
+  --radius-inputs: 6px;
+  --radius-modals: 16px;
+  --radius-buttons: 999px;
+
+  /* Shadows */
+  --shadow-sm: 0px 0px 6px 0px rgba(186, 207, 247, 0.32);
+  --shadow-md: 0px 0px 12px 0px rgba(238, 186, 247, 0.24);
+  --shadow-subtle: inset 0px 0px 0px 1px rgba(186, 215, 247, 0.12);
+  --shadow-frosted-card: inset 0 1px 1px rgba(216, 236, 248, 0.2), inset 0 24px 48px rgba(168, 216, 245, 0.06), 0 16px 32px rgba(0, 0, 0, 0.3);
+  --shadow-feature-card: inset 0 1px 1px rgba(199, 211, 234, 0.12), inset 0 24px 48px rgba(199, 211, 234, 0.05), 0 24px 32px rgba(6, 6, 14, 0.7);
+
+  /* Surfaces */
+  --surface-midnight-canvas: #05060f;
+  --surface-steel-plate: #2f343e;
+  --surface-frosted-glass: rgba(186, 214, 247, 0.03);
+  --surface-deep-glass: rgba(5, 6, 15, 0.97);
+}
+
+/* Base CSS Reset & Background setup */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--color-midnight-canvas);
+  color: var(--color-frost-glow);
+  font-family: var(--font-untitled-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Background Atmosphere Layer (Grid + Conic Halo) */
+.bg-atmosphere {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: 
+    linear-gradient(to right, rgba(186, 215, 247, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(186, 215, 247, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 20%, transparent 80%);
+}
+
+.bg-spotlight {
+  position: fixed;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(102, 58, 243, 0.15) 0%, rgba(124, 145, 182, 0.08) 40%, transparent 70%);
+  filter: blur(40px);
+}
+
+/* Utility Typography Classes */
+.text-gradient {
+  background: var(--gradient-ice-highlight);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.eyebrow-label {
+  font-family: var(--font-dotdigital);
+  font-size: 15px;
+  letter-spacing: 0.10em;
+  color: var(--color-moon-mist);
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-16);
+}
+
+.eyebrow-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-16);
+  margin-bottom: var(--spacing-16);
+}
+
+.eyebrow-line {
+  height: 1px;
+  width: 60px;
+  background: linear-gradient(90deg, transparent, rgba(186, 215, 247, 0.2), transparent);
+}
+
+/* Frosted Glass Surface Utility */
+.glass-panel {
+  background: var(--surface-frosted-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-frosted-card);
+  border: 1px solid var(--color-glass-edge);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--color-void-violet);
+  color: var(--color-pure-white);
+  border-radius: var(--radius-buttons);
+  padding: var(--spacing-12) var(--spacing-24);
+  font-family: var(--font-untitled-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-body-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-8);
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 0 16px rgba(102, 58, 243, 0.4);
+}
+
+.btn-ghost {
+  background: rgba(186, 214, 247, 0.06);
+  color: var(--color-pure-white);
+  border-radius: var(--radius-buttons);
+  padding: var(--spacing-8) var(--spacing-16);
+  font-family: var(--font-untitled-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-body-sm);
+  border: 1px solid var(--color-glass-edge);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  text-decoration: none;
+}
+
+.btn-ghost:hover {
+  background: rgba(186, 214, 247, 0.12);
+  border-color: rgba(186, 215, 247, 0.25);
+}
+
+/* Links */
+a {
+  color: inherit;
+}

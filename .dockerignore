@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.agent
+.claude
+docs
+openspec
+README.md
+*.log

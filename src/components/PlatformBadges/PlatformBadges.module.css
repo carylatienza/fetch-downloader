@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--color-fog-veil);
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.badge {
+  background: rgba(186, 214, 247, 0.04);
+  border: 1px solid var(--color-glass-edge);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-moon-mist);
+  transition: all 0.2s ease;
+}
+
+.badge:hover {
+  background: rgba(186, 214, 247, 0.08);
+  color: var(--color-pure-white);
+  border-color: rgba(186, 215, 247, 0.25);
+}
