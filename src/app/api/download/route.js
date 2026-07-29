@@ -20,14 +20,25 @@ export async function GET(req) {
   const downloadId = searchParams.get('id');
   const ip = getClientIp(req);
 
-  if (!downloadId) {
-    return NextResponse.json(
-      { success: false, error: { code: 'INVALID_ID', message: 'Download ID is required.' } },
-      { status: 400 }
-    );
+  let session = getDownloadSession(downloadId);
+
+  // Fallback: if session was lost due to server restart or TTL, reconstruct from query params
+  if (!session) {
+    const sourceUrl = searchParams.get('url');
+    const title = searchParams.get('title');
+    const mediaType = searchParams.get('mediaType');
+    const format = searchParams.get('format');
+
+    if (sourceUrl) {
+      session = {
+        sourceUrl,
+        title: title || 'media_file',
+        mediaType: mediaType || 'video',
+        format: format || 'mp4',
+      };
+    }
   }
 
-  const session = getDownloadSession(downloadId);
   if (!session) {
     return NextResponse.json(
       { success: false, error: { code: 'NOT_FOUND', message: 'Download not found or expired.' } },
@@ -45,7 +56,7 @@ export async function GET(req) {
   try {
     const filename = sanitizeFilename(session.title, session.format);
 
-    // If mediaType is video and requires yt-dlp streaming
+    // Video extraction & streaming via yt-dlp
     if (session.mediaType === 'video' && session.sourceUrl.includes('http')) {
       const nodeStream = getStreamWithYtDlp(session.sourceUrl);
       const webStream = Readable.toWeb(nodeStream);

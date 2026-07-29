@@ -26,6 +26,7 @@ export default function PreviewCard({ data, onReset }) {
 
   const {
     downloadId,
+    sourceUrl,
     title,
     thumbnail,
     platform,
@@ -39,8 +40,16 @@ export default function PreviewCard({ data, onReset }) {
   const handleDownload = () => {
     setIsDownloading(true);
 
-    // Create an invisible anchor to trigger browser download via /api/download?id=...
-    const downloadUrl = `/api/download?id=${encodeURIComponent(downloadId)}`;
+    // Create self-contained download URL with session ID + fallback parameters
+    const params = new URLSearchParams({
+      id: downloadId || '',
+      url: sourceUrl || '',
+      title: title || 'media_file',
+      mediaType: mediaType || 'video',
+      format: format || 'mp4',
+    });
+
+    const downloadUrl = `/api/download?${params.toString()}`;
     const a = document.createElement('a');
     a.href = downloadUrl;
     a.download = '';

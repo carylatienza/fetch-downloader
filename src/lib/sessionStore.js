@@ -1,6 +1,12 @@
-// Map<downloadId, { sourceUrl, title, platform, mediaType, format, createdAt }>
-const sessions = new Map();
-const SESSION_TTL_MS = 10 * 60 * 1000; // 10 minutes
+// Preserve in-memory Map across Next.js HMR / module reloads in development
+const globalForSessions = globalThis;
+
+if (!globalForSessions.downloadSessions) {
+  globalForSessions.downloadSessions = new Map();
+}
+
+const sessions = globalForSessions.downloadSessions;
+const SESSION_TTL_MS = 15 * 60 * 1000; // 15 minutes
 
 /**
  * Store a download session and return a unique downloadId
