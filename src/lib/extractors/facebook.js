@@ -75,18 +75,25 @@ export class FacebookExtractor extends BaseExtractor {
         const scontentMatches = html.match(/https:\/\/[^"'\s\\]*fbcdn[^"'\s\\]*/gi) || [];
         const cleanUrls = Array.from(new Set(scontentMatches.map(u => u.replace(/&amp;/g, '&').replace(/\\/g, ''))));
         
-        // Filter out static icons/CSS/JS assets
-        const photoUrls = cleanUrls.filter(u => 
+        // Filter out static icons/CSS/JS assets and default avatar silhouette icons
+        let photoUrls = cleanUrls.filter(u => 
           !u.includes('static.xx.fbcdn.net') && 
           !u.includes('rsrc.php') && 
           !u.includes('.ico') && 
           !u.includes('.css') && 
           !u.includes('.js') && 
           !u.includes('.webp') && 
+          !u.includes('30497-1') && 
           !u.includes('s32x32') && 
+          !u.includes('s40x40') && 
           !u.includes('s50x50') && 
+          !u.includes('p40x40') && 
           !u.includes('p50x50')
         );
+
+        if (ogImage && !photoUrls.includes(ogImage) && !ogImage.includes('30497-1')) {
+          photoUrls.unshift(ogImage);
+        }
 
         let imageList = [];
         if (photoUrls.length > 0) {
@@ -95,8 +102,6 @@ export class FacebookExtractor extends BaseExtractor {
             url: imgUrl,
             filename: `photo_${idx + 1}.jpg`
           }));
-        } else if (ogImage) {
-          imageList = [{ id: 1, url: ogImage, filename: 'photo_1.jpg' }];
         }
 
         // Final FBID fallback if scontent extraction yielded nothing
