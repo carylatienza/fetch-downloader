@@ -1,21 +1,22 @@
 import * as cheerio from 'cheerio';
 
-async function extractFb(url) {
+async function testFbShare() {
+  const url = 'https://www.facebook.com/share/p/19K3ANjtHF/';
   const res = await fetch(url, {
     headers: {
       'User-Agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
     },
   });
+
   const html = await res.text();
   const $ = cheerio.load(html);
-  const ogImage = $('meta[property="og:image"]').attr('content') || $('meta[name="twitter:image"]').attr('content');
+
+  let ogImage = $('meta[property="og:image"]').attr('content') || $('meta[name="twitter:image"]').attr('content');
+  if (ogImage) ogImage = ogImage.replace(/&amp;/g, '&');
   const ogTitle = $('meta[property="og:title"]').attr('content');
-  return { ogImage, ogTitle, url: res.url };
+
+  console.log('FB Share Image URL:', ogImage);
+  console.log('FB Share Title:', ogTitle);
 }
 
-async function run() {
-  console.log('Test 1:', await extractFb('https://www.facebook.com/1482575370573723'));
-  console.log('Test 2:', await extractFb('https://www.facebook.com/8shit/posts/pfbid02s8evbmMA4TkxJmGtgRrCgUBUzhWozgNfcuvRmN32cxFpKuzvZogPcbmWNSNf7K5vl'));
-}
-
-run();
+testFbShare();

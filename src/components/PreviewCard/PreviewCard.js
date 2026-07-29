@@ -23,6 +23,7 @@ function formatFileSize(bytes) {
 export default function PreviewCard({ data, onReset }) {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadCompleted, setDownloadCompleted] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const {
     downloadId,
@@ -66,8 +67,14 @@ export default function PreviewCard({ data, onReset }) {
   return (
     <div className={styles.card}>
       <div className={styles.thumbnailWrapper}>
-        {thumbnail ? (
-          <img src={thumbnail} alt={title} className={styles.thumbnail} />
+        {thumbnail && !imageError ? (
+          <img
+            src={thumbnail}
+            alt={title}
+            className={styles.thumbnail}
+            referrerPolicy="no-referrer"
+            onError={() => setImageError(true)}
+          />
         ) : (
           <div className={styles.thumbnailFallback}>
             {mediaType === 'video' ? <Film size={48} /> : <ImageIcon size={48} />}
