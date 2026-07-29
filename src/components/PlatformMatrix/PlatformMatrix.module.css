@@ -44,14 +44,14 @@
 }
 
 .iconWrap {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  border: 1px solid transparent;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
 .cardTitle {
@@ -79,14 +79,25 @@
 .featureItem {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
+  gap: 10px;
+  font-size: 13.5px;
   color: var(--color-moon-mist);
+}
+
+.checkBadge {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  border: 1px solid rgba(124, 106, 239, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .checkIcon {
   color: var(--color-accent);
-  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {

@@ -1,20 +1,12 @@
-import { Youtube, Facebook, Instagram, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
+import { YouTubeLogo, InstagramLogo, FacebookLogo, XLogo } from '@/components/BrandLogos/BrandLogos';
 import styles from './PlatformMatrix.module.css';
-
-function XIcon({ size = 22, style }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={style}>
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  );
-}
 
 const PLATFORM_DATA = [
   {
     id: 'youtube',
     name: 'YouTube',
-    icon: Youtube,
-    color: '#FF0000',
+    LogoComponent: YouTubeLogo,
     description: 'Extract 4K Ultra HD videos, Shorts, and high-bitrate audio.',
     features: [
       { name: '4K & 1080p 60fps MP4', supported: true },
@@ -26,8 +18,7 @@ const PLATFORM_DATA = [
   {
     id: 'instagram',
     name: 'Instagram',
-    icon: Instagram,
-    color: '#E4405F',
+    LogoComponent: InstagramLogo,
     description: 'Download multi-photo carousels as ZIP and full HD Reels.',
     features: [
       { name: 'Multi-photo Carousel ZIP', supported: true },
@@ -39,8 +30,7 @@ const PLATFORM_DATA = [
   {
     id: 'facebook',
     name: 'Facebook',
-    icon: Facebook,
-    color: '#1877F2',
+    LogoComponent: FacebookLogo,
     description: 'Save public video posts, photo collections, and profile media.',
     features: [
       { name: 'HD & SD Video MP4 Streams', supported: true },
@@ -52,8 +42,7 @@ const PLATFORM_DATA = [
   {
     id: 'twitter',
     name: 'X (Twitter)',
-    icon: XIcon,
-    color: '#F4F4F5',
+    LogoComponent: XLogo,
     description: 'Download 1080p tweet videos, multi-image tweets, and GIFs.',
     features: [
       { name: '1080p Tweet Video MP4', supported: true },
@@ -79,11 +68,11 @@ export default function PlatformMatrix() {
       </p>
 
       <div className={styles.grid}>
-        {PLATFORM_DATA.map(({ id, name, icon: Icon, color, description, features }) => (
+        {PLATFORM_DATA.map(({ id, name, LogoComponent, description, features }) => (
           <div key={id} className={`${styles.card} glass-panel reveal`}>
             <div className={styles.cardHeader}>
-              <div className={styles.iconWrap} style={{ background: `${color}18`, borderColor: `${color}35` }}>
-                <Icon size={22} style={{ color }} />
+              <div className={styles.iconWrap}>
+                <LogoComponent size={36} />
               </div>
               <div>
                 <h3 className={styles.cardTitle}>{name}</h3>
@@ -94,7 +83,9 @@ export default function PlatformMatrix() {
             <div className={styles.featureList}>
               {features.map((feat) => (
                 <div key={feat.name} className={styles.featureItem}>
-                  <Check size={14} className={styles.checkIcon} />
+                  <div className={styles.checkBadge}>
+                    <Check size={11} className={styles.checkIcon} />
+                  </div>
                   <span>{feat.name}</span>
                 </div>
               ))}

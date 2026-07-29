@@ -118,16 +118,17 @@
 }
 
 .stepIconWrap {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: 14px;
-  background: var(--color-accent-soft);
-  border: 1px solid rgba(124, 106, 239, 0.15);
-  color: var(--color-blueprint-blue);
+  background: linear-gradient(135deg, rgba(124, 106, 239, 0.2), rgba(168, 200, 238, 0.15));
+  border: 1px solid rgba(124, 106, 239, 0.35);
+  color: var(--color-pure-white);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 4px;
+  box-shadow: 0 4px 16px rgba(124, 106, 239, 0.2);
 }
 
 .stepTitle {
@@ -192,16 +193,17 @@
 }
 
 .featureIcon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: var(--color-accent-soft);
-  border: 1px solid rgba(124, 106, 239, 0.15);
-  color: var(--color-blueprint-blue);
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(124, 106, 239, 0.22), rgba(168, 200, 238, 0.18));
+  border: 1px solid rgba(124, 106, 239, 0.35);
+  color: var(--color-pure-white);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(124, 106, 239, 0.2);
 }
 
 .featureTitle {
