@@ -20,7 +20,36 @@ export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const downloadId = searchParams.get('id');
   const singleImageUrl = searchParams.get('imageUrl');
+  const isPreview = searchParams.get('preview') === 'true';
   const ip = getClientIp(req);
+
+  // Standalone image preview proxy handler
+  if (singleImageUrl && isPreview) {
+    try {
+      const mediaResponse = await fetch(singleImageUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+          'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+        },
+      });
+
+      if (!mediaResponse.ok) {
+        throw new Error(`Failed to fetch preview image: ${mediaResponse.statusText}`);
+      }
+
+      const contentType = mediaResponse.headers.get('content-type') || 'image/jpeg';
+      const headers = new Headers({
+        'Content-Type': contentType.includes('text') ? 'image/jpeg' : contentType,
+        'Content-Disposition': 'inline',
+        'Cache-Control': 'public, max-age=86400',
+      });
+
+      return new Response(mediaResponse.body, { headers });
+    } catch (err) {
+      console.error('Image preview proxy error:', err);
+      return new Response(null, { status: 404 });
+    }
+  }
 
   let session = getDownloadSession(downloadId);
 
@@ -129,8 +158,8 @@ export async function GET(req) {
       (session.mediaType === 'image' || session.mediaType === 'gallery' ? 'image/jpeg' : 'video/mp4');
 
     const headers = new Headers({
-      'Content-Type': contentType,
-      'Content-Disposition': `attachment; filename="${filename}"`,
+      'Content-Type': contentType.includes('text') ? 'image/jpeg' : contentType,
+      'Content-Disposition': isPreview ? 'inline' : `attachment; filename="${filename}"`,
       'Cache-Control': 'no-cache',
     });
 

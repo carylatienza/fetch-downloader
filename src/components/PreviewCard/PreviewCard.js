@@ -20,6 +20,12 @@ function formatFileSize(bytes) {
   return `~${Math.round(mb)} MB`;
 }
 
+function getProxiedImageSrc(url) {
+  if (!url) return '';
+  if (url.startsWith('/api/download') || url.startsWith('data:')) return url;
+  return `/api/download?imageUrl=${encodeURIComponent(url)}&preview=true`;
+}
+
 export default function PreviewCard({ data, onReset }) {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadCompleted, setDownloadCompleted] = useState(false);
@@ -41,7 +47,8 @@ export default function PreviewCard({ data, onReset }) {
   } = data;
 
   const isGallery = Array.isArray(images) && images.length > 1;
-  const currentImage = isGallery ? images[activePhotoIndex]?.url : (thumbnail || sourceUrl);
+  const rawImage = isGallery ? images[activePhotoIndex]?.url : (thumbnail || sourceUrl);
+  const currentImage = getProxiedImageSrc(rawImage);
 
   const handlePrevPhoto = (e) => {
     e.stopPropagation();
