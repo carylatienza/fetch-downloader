@@ -4,14 +4,30 @@ import { promisify } from 'util';
 const execFileAsync = promisify(execFile);
 
 /**
+ * Get FFmpeg binary path from @ffmpeg-installer/ffmpeg package if available
+ */
+function getFfmpegPath() {
+  try {
+    const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
+    return ffmpegInstaller.path || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Determine command and args synchronously to avoid spawn ENOENT errors
  */
 function getCommandArgs(extraArgs) {
+  const ffmpegPath = getFfmpegPath();
+  const ffmpegFlags = ffmpegPath ? ['--ffmpeg-location', ffmpegPath] : [];
+  const fullArgs = [...ffmpegFlags, ...extraArgs];
+
   try {
     execFileSync('yt-dlp', ['--version'], { stdio: 'ignore' });
-    return { command: 'yt-dlp', args: extraArgs };
+    return { command: 'yt-dlp', args: fullArgs };
   } catch {
-    return { command: 'python', args: ['-m', 'yt_dlp', ...extraArgs] };
+    return { command: 'python', args: ['-m', 'yt_dlp', ...fullArgs] };
   }
 }
 
@@ -47,7 +63,7 @@ export async function getMetadataWithYtDlp(url) {
 export function getStreamWithYtDlp(url) {
   const commonArgs = [
     '-o', '-',
-    '-f', 'best[ext=mp4]/best',
+    '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio/best',
     '--no-warnings',
     '--no-playlist',
     '--no-check-certificates',

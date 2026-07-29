@@ -1,7 +1,7 @@
-import { YouTubeExtractor } from './youtube';
-import { FacebookExtractor } from './facebook';
-import { InstagramExtractor } from './instagram';
-import { TwitterExtractor } from './twitter';
+import { YouTubeExtractor } from './youtube.js';
+import { FacebookExtractor } from './facebook.js';
+import { InstagramExtractor } from './instagram.js';
+import { TwitterExtractor } from './twitter.js';
 
 const extractors = [
   new YouTubeExtractor(),
@@ -13,7 +13,7 @@ const extractors = [
 /**
  * Finds the appropriate extractor for the given URL
  * @param {string} url 
- * @returns {import('./base').BaseExtractor | null}
+ * @returns {import('./base.js').BaseExtractor | null}
  */
 export function getExtractorForUrl(url) {
   if (!url) return null;

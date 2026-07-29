@@ -1,5 +1,5 @@
-import { BaseExtractor } from './base';
-import { getMetadataWithYtDlp } from '../ytdlp';
+import { BaseExtractor } from './base.js';
+import { getMetadataWithYtDlp } from '../ytdlp.js';
 import * as cheerio from 'cheerio';
 
 export class FacebookExtractor extends BaseExtractor {
@@ -21,13 +21,25 @@ export class FacebookExtractor extends BaseExtractor {
     // 1. Try yt-dlp first (handles FB videos & reels great)
     try {
       const info = await getMetadataWithYtDlp(url);
+      
+      let maxHeight = info.height || 0;
+      if (Array.isArray(info.formats)) {
+        for (const fmt of info.formats) {
+          if (typeof fmt.height === 'number' && fmt.height > maxHeight) {
+            maxHeight = fmt.height;
+          }
+        }
+      }
+
+      let qualityStr = maxHeight > 0 ? `${maxHeight}p` : 'HD';
+
       return {
         platform: 'facebook',
         mediaType: 'video',
         title: info.title || info.description || 'Facebook Video',
         thumbnail: info.thumbnail || '',
         duration: info.duration || null,
-        quality: info.height ? `${info.height}p` : 'HD',
+        quality: qualityStr,
         fileSize: info.filesize || info.filesize_approx || null,
         format: 'mp4',
         sourceUrl: url,

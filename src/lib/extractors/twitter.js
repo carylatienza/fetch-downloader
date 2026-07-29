@@ -1,5 +1,5 @@
-import { BaseExtractor } from './base';
-import { getMetadataWithYtDlp } from '../ytdlp';
+import { BaseExtractor } from './base.js';
+import { getMetadataWithYtDlp } from '../ytdlp.js';
 import * as cheerio from 'cheerio';
 
 export class TwitterExtractor extends BaseExtractor {
@@ -17,13 +17,23 @@ export class TwitterExtractor extends BaseExtractor {
     // 1. Try yt-dlp first (handles tweet videos & gifs)
     try {
       const info = await getMetadataWithYtDlp(url);
+
+      let maxHeight = info.height || 0;
+      if (Array.isArray(info.formats)) {
+        for (const fmt of info.formats) {
+          if (typeof fmt.height === 'number' && fmt.height > maxHeight) {
+            maxHeight = fmt.height;
+          }
+        }
+      }
+
       return {
         platform: 'twitter',
         mediaType: 'video',
         title: info.title || info.description || 'X/Twitter Post',
         thumbnail: info.thumbnail || '',
         duration: info.duration || null,
-        quality: info.height ? `${info.height}p` : 'HD',
+        quality: maxHeight > 0 ? `${maxHeight}p` : 'HD',
         fileSize: info.filesize || info.filesize_approx || null,
         format: 'mp4',
         sourceUrl: url,

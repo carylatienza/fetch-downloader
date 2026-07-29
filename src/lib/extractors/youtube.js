@@ -1,5 +1,5 @@
-import { BaseExtractor } from './base';
-import { getMetadataWithYtDlp } from '../ytdlp';
+import { BaseExtractor } from './base.js';
+import { getMetadataWithYtDlp } from '../ytdlp.js';
 
 export class YouTubeExtractor extends BaseExtractor {
   constructor() {
@@ -20,8 +20,24 @@ export class YouTubeExtractor extends BaseExtractor {
     try {
       const info = await getMetadataWithYtDlp(url);
       
-      const height = info.height || info.format_note || 'Best';
-      const qualityStr = typeof height === 'number' ? `${height}p` : height;
+      // Calculate true maximum video resolution height across all formats (DASH + progressive)
+      let maxHeight = info.height || 0;
+      if (Array.isArray(info.formats)) {
+        for (const fmt of info.formats) {
+          if (typeof fmt.height === 'number' && fmt.height > maxHeight) {
+            maxHeight = fmt.height;
+          }
+        }
+      }
+
+      let qualityStr = maxHeight > 0 ? `${maxHeight}p` : (info.format_note || 'Best');
+      if (maxHeight >= 2160) {
+        qualityStr = `${maxHeight}p (4K)`;
+      } else if (maxHeight >= 1440) {
+        qualityStr = `${maxHeight}p (2K)`;
+      } else if (maxHeight >= 1080) {
+        qualityStr = `${maxHeight}p (Full HD)`;
+      }
 
       return {
         platform: 'youtube',
