@@ -36,7 +36,6 @@ export default function SpotlightCard({ children, className = '', spotlightColor
       {...props}
     >
       <div className={styles.spotlightOverlay} aria-hidden="true" />
-      <div className={styles.borderHighlight} aria-hidden="true" />
       <div className={styles.cardContent}>{children}</div>
     </div>
   );
