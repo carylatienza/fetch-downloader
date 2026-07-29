@@ -1,10 +1,11 @@
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
+import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
 import styles from './page.module.css';
 
 export const metadata = {
   title: 'Privacy Policy — Fetch',
-  description: 'Privacy Policy for Fetch media downloader.',
+  description: 'Read the Fetch Privacy Policy to understand how we protect user privacy with zero tracking, zero ad cookies, and zero media storage.',
 };
 
 export default function PrivacyPage() {
@@ -12,41 +13,35 @@ export default function PrivacyPage() {
     <>
       <Header />
       <main className={styles.main}>
-        <div className="eyebrow-container">
+        <div className="eyebrow-container reveal">
           <div className="eyebrow-line" />
-          <span className="eyebrow-label">PRIVACY</span>
+          <span className="eyebrow-label">LEGAL & PRIVACY</span>
           <div className="eyebrow-line" />
         </div>
 
-        <h1 className={styles.headline}>Privacy Policy</h1>
-        <p className={styles.lastUpdated}>Last updated: July 2025</p>
+        <h1 className={`${styles.headline} reveal reveal-delay-1`}>Privacy Policy</h1>
+        <p className={`${styles.subtext} reveal reveal-delay-2`}>
+          Last updated: July 29, 2025. Fetch is built with a strict privacy-first architecture.
+        </p>
 
-        <div className="glass-panel" style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}>
-          <h2 className={styles.sectionTitle}>1. Overview</h2>
-          <p className={styles.text}>
-            Fetch is committed to protecting your privacy. We collect almost nothing. We don&apos;t require accounts, we don&apos;t track you, and we don&apos;t store your downloads.
-          </p>
+        <section className={`${styles.section} reveal`}>
+          <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.2)" className="glass-panel" style={{ padding: '40px' }}>
+            <h2 className={styles.sectionTitle}>1. Zero Storage Policy</h2>
+            <p className={styles.paragraph}>
+              Fetch does not host, store, save, or archive any extracted videos, images, or audio files on our servers. When you paste a URL, media streams are proxied directly from the official platform CDNs (YouTube, Facebook, Instagram, X) to your local browser session.
+            </p>
 
-          <h2 className={styles.sectionTitle}>2. Information We Collect</h2>
-          <p className={styles.text}>
-            We do not collect personal information like names, emails, or phone numbers. We do not store downloaded media on our servers. Media data is processed in memory and discarded after request completion.
-          </p>
+            <h2 className={styles.sectionTitle}>2. No Tracking or Personal Data Collection</h2>
+            <p className={styles.paragraph}>
+              We do not require user registration, accounts, or personal information to use Fetch. We do not place tracking cookies, run third-party advertising scripts, or build user profiles.
+            </p>
 
-          <h2 className={styles.sectionTitle}>3. Server Logs</h2>
-          <p className={styles.text}>
-            Standard server logs (IP address, timestamp, requested URL) are maintained temporarily for security and rate limiting. We do not sell or share log data for marketing or tracking.
-          </p>
-
-          <h2 className={styles.sectionTitle}>4. Hosting & Infrastructure</h2>
-          <p className={styles.text}>
-            Fetch is hosted on Render.com. Standard hosting infrastructure privacy policies apply to network traffic.
-          </p>
-
-          <h2 className={styles.sectionTitle}>5. Contact</h2>
-          <p className={styles.text}>
-            For privacy questions, feel free to reach out via GitHub.
-          </p>
-        </div>
+            <h2 className={styles.sectionTitle}>3. Server Logs</h2>
+            <p className={styles.paragraph}>
+              Temporary server logs are maintained strictly for performance monitoring, rate limiting, and technical debugging. These logs are automatically purged regularly and are never shared or sold.
+            </p>
+          </SpotlightCard>
+        </section>
       </main>
       <Footer />
     </>

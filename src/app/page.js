@@ -1,58 +1,29 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import Header from '@/components/Header/Header';
-import Footer from '@/components/Footer/Footer';
 import UrlInput from '@/components/UrlInput/UrlInput';
 import PlatformBadges from '@/components/PlatformBadges/PlatformBadges';
-import LoadingState from '@/components/LoadingState/LoadingState';
 import PreviewCard from '@/components/PreviewCard/PreviewCard';
-import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
 import PlatformMatrix from '@/components/PlatformMatrix/PlatformMatrix';
 import ComparisonTable from '@/components/ComparisonTable/ComparisonTable';
 import FaqSection from '@/components/FaqSection/FaqSection';
+import Footer from '@/components/Footer/Footer';
+import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
 import { Shield, Sparkles, Layers, Link as LinkIcon, Search, Download } from 'lucide-react';
 import styles from './page.module.css';
 
-function useScrollReveal() {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const targets = el.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
-    );
-
-    targets.forEach((t) => observer.observe(t));
-    return () => observer.disconnect();
-  }, []);
-
-  return ref;
-}
-
-export default function HomePage() {
-  const [status, setStatus] = useState('idle');
+export default function Home() {
   const [extractedData, setExtractedData] = useState(null);
-  const [errorData, setErrorData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [currentUrl, setCurrentUrl] = useState('');
-  const scrollRef = useScrollReveal();
 
   const handleExtract = async (url) => {
-    setCurrentUrl(url);
-    setStatus('loading');
-    setErrorData(null);
+    setIsLoading(true);
+    setError(null);
     setExtractedData(null);
+    setCurrentUrl(url);
 
     try {
       const response = await fetch('/api/extract', {
@@ -61,29 +32,23 @@ export default function HomePage() {
         body: JSON.stringify({ url }),
       });
 
-      const result = await response.json();
+      const data = await response.json();
 
-      if (result.success) {
-        setExtractedData(result.data);
-        setStatus('success');
-      } else {
-        setErrorData(result.error);
-        setStatus('error');
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to extract media details.');
       }
+
+      setExtractedData(data);
     } catch (err) {
-      console.error('Extraction error:', err);
-      setErrorData({
-        code: 'EXTRACTION_FAILED',
-        message: 'Could not connect to extraction server. Please check your connection.',
-      });
-      setStatus('error');
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleReset = () => {
-    setStatus('idle');
     setExtractedData(null);
-    setErrorData(null);
+    setError(null);
     setCurrentUrl('');
   };
 
@@ -91,45 +56,53 @@ export default function HomePage() {
     <>
       <Header />
 
-      <main className={styles.main} ref={scrollRef}>
+      <main className={styles.main}>
         {/* Hero Section */}
         <section className={styles.heroSection}>
           <div className={styles.heroInner}>
-            <div className="eyebrow-container">
-              <div className="eyebrow-line" />
-              <div className={styles.featureBadge}>
-                <Sparkles size={12} className={styles.badgeSparkle} />
-                <span>100% Free · No Ads · Multi-Photo ZIP Download</span>
-              </div>
-              <div className="eyebrow-line" />
+            <div className={`${styles.featureBadge} reveal`}>
+              <Sparkles size={12} className={styles.badgeSparkle} />
+              <span>100% Free · No Ads · Multi-Photo ZIP Download</span>
             </div>
 
-            <h1 className={`${styles.title} text-gradient`}>Fetch</h1>
+            <h1 className={`${styles.title} text-gradient-ice reveal reveal-delay-1`}>Fetch</h1>
 
-            <p className={styles.subheadline}>
+            <p className={`${styles.subheadline} reveal reveal-delay-2`}>
               Grab videos and images from YouTube, Facebook, Instagram, and X in maximum quality. No ads, no sign-ups — just paste and download.
             </p>
 
-            <div className={styles.inputArea}>
-              <UrlInput onSubmit={handleExtract} isLoading={status === 'loading'} initialValue={currentUrl} />
+            <div className={`${styles.inputArea} reveal reveal-delay-3`}>
+              <UrlInput
+                onExtract={handleExtract}
+                isLoading={isLoading}
+                externalUrl={currentUrl}
+              />
 
-              {status === 'idle' && <PlatformBadges onSelectSample={handleExtract} />}
-              {status === 'loading' && <LoadingState />}
-              {status === 'success' && extractedData && (
-                <PreviewCard data={extractedData} onReset={handleReset} />
-              )}
-              {status === 'error' && errorData && (
-                <ErrorMessage
-                  error={errorData}
-                  onRetry={() => handleExtract(currentUrl)}
-                  onReset={handleReset}
-                />
+              {!extractedData && (
+                <PlatformBadges onSelectSample={handleExtract} />
               )}
             </div>
+
+            {error && (
+              <div className="error-banner reveal">
+                <span>{error}</span>
+                <button onClick={handleReset} className="error-reset-btn">
+                  Try another link
+                </button>
+              </div>
+            )}
+
+            {extractedData && (
+              <div className="reveal">
+                <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.28)">
+                  <PreviewCard data={extractedData} onReset={handleReset} />
+                </SpotlightCard>
+              </div>
+            )}
           </div>
         </section>
 
-        {/* How It Works — Step Timeline */}
+        {/* How It Works */}
         <section className={styles.stepsSection}>
           <div className="eyebrow-container reveal">
             <div className="eyebrow-line" />
@@ -190,8 +163,7 @@ export default function HomePage() {
           <h2 className={`${styles.sectionHeading} reveal`}>One tool. Every platform.</h2>
 
           <div className={styles.bentoGrid}>
-            {/* Full-width hero card */}
-            <div className={`${styles.bentoHero} glass-panel reveal reveal-delay-1`}>
+            <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.25)" className={`${styles.bentoHero} glass-panel reveal reveal-delay-1`}>
               <div className={styles.bentoInner}>
                 <div className={styles.featureIcon}>
                   <Shield size={24} strokeWidth={1.5} />
@@ -203,10 +175,9 @@ export default function HomePage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </SpotlightCard>
 
-            {/* Two side-by-side cards */}
-            <div className={`${styles.bentoCard} glass-panel reveal reveal-delay-2`}>
+            <SpotlightCard spotlightColor="rgba(168, 200, 238, 0.25)" className={`${styles.bentoCard} glass-panel reveal reveal-delay-2`}>
               <div className={styles.bentoInner}>
                 <div className={styles.featureIcon}>
                   <Sparkles size={24} strokeWidth={1.5} />
@@ -216,9 +187,9 @@ export default function HomePage() {
                   We extract the original source file at highest resolution. No silent compression.
                 </p>
               </div>
-            </div>
+            </SpotlightCard>
 
-            <div className={`${styles.bentoCard} glass-panel reveal reveal-delay-3`}>
+            <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.25)" className={`${styles.bentoCard} glass-panel reveal reveal-delay-3`}>
               <div className={styles.bentoInner}>
                 <div className={styles.featureIcon}>
                   <Layers size={24} strokeWidth={1.5} />
@@ -228,7 +199,7 @@ export default function HomePage() {
                   YouTube, Facebook, Instagram, X — all from one input. No more juggling different sites.
                 </p>
               </div>
-            </div>
+            </SpotlightCard>
           </div>
         </section>
 

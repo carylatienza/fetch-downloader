@@ -1,4 +1,5 @@
-import { Check, X, Shield, Zap, Image, Sparkles } from 'lucide-react';
+import { Check, X } from 'lucide-react';
+import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
 import styles from './ComparisonTable.module.css';
 
 const COMPARISON_ROWS = [
@@ -53,15 +54,14 @@ export default function ComparisonTable() {
         No popups, no misleading buttons, no silent compression.
       </p>
 
-      <div className={`${styles.tableWrapper} glass-panel reveal`}>
+      <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.2)" className={`${styles.tableWrapper} glass-panel reveal`}>
         <table className={styles.table}>
           <thead>
             <tr>
               <th className={styles.featureHeader}>Feature</th>
-              <th className={styles.othersHeader}>Typical Downloader Sites</th>
+              <th className={styles.othersHeader}>Other Downloaders</th>
               <th className={styles.fetchHeader}>
-                <div className={styles.fetchBrand}>
-                  <Sparkles size={16} className={styles.sparkleIcon} />
+                <div className={styles.fetchBadge}>
                   <span>Fetch</span>
                 </div>
               </th>
@@ -72,22 +72,26 @@ export default function ComparisonTable() {
               <tr key={row.feature} className={styles.row}>
                 <td className={styles.featureCell}>{row.feature}</td>
                 <td className={styles.othersCell}>
-                  <div className={styles.cellContent}>
-                    <X size={14} className={styles.badIcon} />
+                  <div className={styles.cellInner}>
+                    <span className={styles.badIcon}>
+                      <X size={14} />
+                    </span>
                     <span>{row.others}</span>
                   </div>
                 </td>
                 <td className={styles.fetchCell}>
-                  <div className={styles.cellContent}>
-                    <Check size={14} className={styles.goodIcon} />
-                    <span>{row.fetch}</span>
+                  <div className={styles.cellInner}>
+                    <span className={styles.goodIcon}>
+                      <Check size={14} />
+                    </span>
+                    <strong>{row.fetch}</strong>
                   </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </SpotlightCard>
     </section>
   );
 }

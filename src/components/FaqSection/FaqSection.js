@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
 import styles from './FaqSection.module.css';
 
 const FAQS = [
@@ -48,8 +49,9 @@ export default function FaqSection() {
         {FAQS.map((faq, index) => {
           const isOpen = openIndex === index;
           return (
-            <div
+            <SpotlightCard
               key={faq.question}
+              spotlightColor="rgba(124, 106, 239, 0.22)"
               className={`${styles.item} glass-panel ${isOpen ? styles.itemOpen : ''}`}
             >
               <button
@@ -65,12 +67,12 @@ export default function FaqSection() {
                 />
               </button>
 
-              {isOpen && (
-                <div className={styles.answerWrapper}>
+              <div className={`${styles.answerWrap} ${isOpen ? styles.answerOpen : ''}`}>
+                <div className={styles.answerInner}>
                   <p className={styles.answerText}>{faq.answer}</p>
                 </div>
-              )}
-            </div>
+              </div>
+            </SpotlightCard>
           );
         })}
       </div>

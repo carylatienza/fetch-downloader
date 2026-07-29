@@ -1,10 +1,11 @@
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
+import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
 import styles from './page.module.css';
 
 export const metadata = {
   title: 'Terms of Service — Fetch',
-  description: 'Terms of Service for using Fetch media downloader.',
+  description: 'Terms of Service governing the use of Fetch media downloader.',
 };
 
 export default function TermsPage() {
@@ -12,49 +13,35 @@ export default function TermsPage() {
     <>
       <Header />
       <main className={styles.main}>
-        <div className="eyebrow-container">
+        <div className="eyebrow-container reveal">
           <div className="eyebrow-line" />
           <span className="eyebrow-label">LEGAL</span>
           <div className="eyebrow-line" />
         </div>
 
-        <h1 className={styles.headline}>Terms of Service</h1>
-        <p className={styles.lastUpdated}>Last updated: July 2025</p>
+        <h1 className={`${styles.headline} reveal reveal-delay-1`}>Terms of Service</h1>
+        <p className={`${styles.subtext} reveal reveal-delay-2`}>
+          Last updated: July 29, 2025. Please review these terms before using Fetch.
+        </p>
 
-        <div className="glass-panel" style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}>
-          <h2 className={styles.sectionTitle}>1. Acceptance of Terms</h2>
-          <p className={styles.text}>
-            By accessing and using Fetch (&quot;the Service&quot;), you agree to be bound by these Terms of Service. If you do not agree with these terms, please do not use the Service.
-          </p>
+        <section className={`${styles.section} reveal`}>
+          <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.2)" className="glass-panel" style={{ padding: '40px' }}>
+            <h2 className={styles.sectionTitle}>1. Acceptance of Terms</h2>
+            <p className={styles.paragraph}>
+              By accessing and using Fetch, you agree to comply with these Terms of Service. If you do not agree with any part of these terms, please do not use the application.
+            </p>
 
-          <h2 className={styles.sectionTitle}>2. Description of Service</h2>
-          <p className={styles.text}>
-            Fetch is a free, web-based tool that extracts and facilitates the download of publicly available media content from supported social media platforms. Fetch does not host, store, or redistribute any content.
-          </p>
+            <h2 className={styles.sectionTitle}>2. Permitted Use & Copyright Compliance</h2>
+            <p className={styles.paragraph}>
+              Fetch is designed for downloading public media content for personal, non-commercial, or fair use purposes. Users are solely responsible for ensuring they have the legal right or permission to download and store media obtained via Fetch.
+            </p>
 
-          <h2 className={styles.sectionTitle}>3. Permitted Use</h2>
-          <p className={styles.text}>
-            You may use Fetch to download publicly available videos and images for personal, non-commercial use. You are responsible for ensuring that your use of downloaded content complies with applicable copyright laws and the terms of service of the original platform.
-          </p>
-
-          <h2 className={styles.sectionTitle}>4. Prohibited Use</h2>
-          <ul className={styles.list}>
-            <li>Download content that you do not have the right to access.</li>
-            <li>Download, distribute, or sell copyrighted content without permission.</li>
-            <li>Circumvent access controls, paywalls, or authentication requirements.</li>
-            <li>Use automated bots or scripts to access the Service at excessive rates.</li>
-          </ul>
-
-          <h2 className={styles.sectionTitle}>5. Disclaimer of Warranties</h2>
-          <p className={styles.text}>
-            The Service is provided &quot;as is&quot; without any warranties of any kind. We do not guarantee uninterrupted or error-free operation. Media availability depends on third-party platforms.
-          </p>
-
-          <h2 className={styles.sectionTitle}>6. Limitation of Liability</h2>
-          <p className={styles.text}>
-            Fetch and its creators shall not be liable for any direct, indirect, or incidental damages arising from your use of the Service.
-          </p>
-        </div>
+            <h2 className={styles.sectionTitle}>3. Disclaimer of Warranties</h2>
+            <p className={styles.paragraph}>
+              Fetch is provided on an &quot;as is&quot; and &quot;as available&quot; basis without warranties of any kind. We do not guarantee uninterrupted service or compatibility with all third-party media links.
+            </p>
+          </SpotlightCard>
+        </section>
       </main>
       <Footer />
     </>

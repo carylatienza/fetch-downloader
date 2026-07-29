@@ -1,5 +1,6 @@
 import { Check } from 'lucide-react';
 import { YouTubeLogo, InstagramLogo, FacebookLogo, XLogo } from '@/components/BrandLogos/BrandLogos';
+import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
 import styles from './PlatformMatrix.module.css';
 
 const PLATFORM_DATA = [
@@ -7,6 +8,7 @@ const PLATFORM_DATA = [
     id: 'youtube',
     name: 'YouTube',
     LogoComponent: YouTubeLogo,
+    spotlightColor: 'rgba(255, 0, 0, 0.35)',
     description: 'Extract 4K Ultra HD videos, Shorts, and high-bitrate audio.',
     features: [
       { name: '4K & 1080p 60fps MP4', supported: true },
@@ -19,6 +21,7 @@ const PLATFORM_DATA = [
     id: 'instagram',
     name: 'Instagram',
     LogoComponent: InstagramLogo,
+    spotlightColor: 'rgba(228, 64, 95, 0.35)',
     description: 'Download multi-photo carousels as ZIP and full HD Reels.',
     features: [
       { name: 'Multi-photo Carousel ZIP', supported: true },
@@ -31,6 +34,7 @@ const PLATFORM_DATA = [
     id: 'facebook',
     name: 'Facebook',
     LogoComponent: FacebookLogo,
+    spotlightColor: 'rgba(24, 119, 242, 0.35)',
     description: 'Save public video posts, photo collections, and profile media.',
     features: [
       { name: 'HD & SD Video MP4 Streams', supported: true },
@@ -43,6 +47,7 @@ const PLATFORM_DATA = [
     id: 'twitter',
     name: 'X (Twitter)',
     LogoComponent: XLogo,
+    spotlightColor: 'rgba(255, 255, 255, 0.25)',
     description: 'Download 1080p tweet videos, multi-image tweets, and GIFs.',
     features: [
       { name: '1080p Tweet Video MP4', supported: true },
@@ -68,8 +73,8 @@ export default function PlatformMatrix() {
       </p>
 
       <div className={styles.grid}>
-        {PLATFORM_DATA.map(({ id, name, LogoComponent, description, features }) => (
-          <div key={id} className={`${styles.card} glass-panel reveal`}>
+        {PLATFORM_DATA.map(({ id, name, LogoComponent, spotlightColor, description, features }) => (
+          <SpotlightCard key={id} spotlightColor={spotlightColor} className={`${styles.card} glass-panel reveal`}>
             <div className={styles.cardHeader}>
               <div className={styles.iconWrap}>
                 <LogoComponent size={36} />
@@ -90,7 +95,7 @@ export default function PlatformMatrix() {
                 </div>
               ))}
             </div>
-          </div>
+          </SpotlightCard>
         ))}
       </div>
     </section>

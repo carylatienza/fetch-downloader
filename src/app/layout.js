@@ -1,4 +1,6 @@
 import { Sora, Outfit, JetBrains_Mono } from 'next/font/google';
+import CursorSpotlight from '@/components/CursorSpotlight/CursorSpotlight';
+import ScrollObserverProvider from '@/components/Providers/ScrollObserverProvider';
 import './globals.css';
 
 const sora = Sora({
@@ -36,12 +38,14 @@ export default function RootLayout({ children }) {
       className={`${sora.variable} ${outfit.variable} ${jetbrainsMono.variable}`}
     >
       <body>
+        <CursorSpotlight />
         <div className="bg-noise" aria-hidden="true" />
         <div className="bg-atmosphere" />
-        <div className="bg-spotlight" />
-        <div style={{ position: 'relative', zIndex: 1, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-          {children}
-        </div>
+        <ScrollObserverProvider>
+          <div style={{ position: 'relative', zIndex: 1, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            {children}
+          </div>
+        </ScrollObserverProvider>
       </body>
     </html>
   );

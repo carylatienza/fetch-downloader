@@ -13,7 +13,7 @@
 }
 
 .accordion {
-  max-width: 800px;
+  max-width: 780px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -22,45 +22,38 @@
 }
 
 .item {
-  border-radius: var(--radius-cards);
-  overflow: hidden;
-  transition: border-color 0.2s ease;
-}
-
-.itemOpen {
-  border-color: var(--color-glass-edge-strong);
+  border-radius: var(--radius-2xl, 16px);
 }
 
 .questionBtn {
   width: 100%;
-  padding: 20px 24px;
-  background: transparent;
-  border: none;
+  padding: 22px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  color: var(--color-pure-white);
+  background: transparent;
+  border: none;
   cursor: pointer;
   text-align: left;
   font-family: var(--font-body);
-  transition: background 0.2s ease;
-}
-
-.questionBtn:hover {
-  background: rgba(140, 170, 220, 0.03);
 }
 
 .questionText {
   font-size: 16px;
-  font-weight: var(--font-weight-medium);
-  line-height: 1.4;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-pure-white);
+  transition: color var(--duration-normal) ease;
+}
+
+.itemOpen .questionText {
+  color: var(--color-blueprint-blue);
 }
 
 .chevron {
   color: var(--color-fog-veil);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
   flex-shrink: 0;
-  transition: transform var(--duration-normal) var(--ease-spring);
 }
 
 .chevronRotated {
@@ -68,18 +61,23 @@
   color: var(--color-accent);
 }
 
-.answerWrapper {
-  padding: 0 24px 22px;
-  animation: fadeIn 0.25s ease-out;
+.answerWrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.answerOpen {
+  grid-template-rows: 1fr;
+}
+
+.answerInner {
+  overflow: hidden;
 }
 
 .answerText {
+  padding: 0 24px 22px;
   font-size: 14.5px;
   color: var(--color-fog-veil);
-  line-height: 1.6;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
+  line-height: 1.65;
 }
