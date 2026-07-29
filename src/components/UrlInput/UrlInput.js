@@ -67,21 +67,22 @@ export default function UrlInput({ onSubmit, isLoading, initialValue = '' }) {
           disabled={isLoading}
           autoComplete="off"
           spellCheck="false"
+          suppressHydrationWarning
         />
 
         {url && !isLoading && (
-          <button type="button" onClick={handleClear} className={styles.clearBtn} aria-label="Clear input">
+          <button type="button" onClick={handleClear} className={styles.clearBtn} aria-label="Clear input" suppressHydrationWarning>
             <X size={16} />
           </button>
         )}
 
         {!url && !isLoading && (
-          <button type="button" onClick={handlePaste} className={styles.pasteBtn}>
+          <button type="button" onClick={handlePaste} className={styles.pasteBtn} suppressHydrationWarning>
             Paste
           </button>
         )}
 
-        <button type="submit" disabled={isLoading} className="btn-primary" style={{ height: '44px' }}>
+        <button type="submit" disabled={isLoading} className="btn-primary" style={{ height: '44px' }} suppressHydrationWarning>
           <span>{isLoading ? 'Analyzing...' : 'Fetch Media'}</span>
           <ArrowRight size={16} />
         </button>
