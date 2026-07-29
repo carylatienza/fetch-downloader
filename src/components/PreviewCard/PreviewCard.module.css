@@ -21,6 +21,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 0.2s ease;
 }
 
 .thumbnailFallback {
@@ -39,6 +40,7 @@
   left: 12px;
   display: flex;
   gap: 8px;
+  z-index: 2;
 }
 
 .badge {
@@ -73,6 +75,54 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  z-index: 2;
+}
+
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(5, 6, 15, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-glass-edge);
+  color: var(--color-pure-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.navBtn:hover {
+  background: rgba(102, 58, 243, 0.85);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.prevBtn {
+  left: 12px;
+}
+
+.nextBtn {
+  right: 12px;
+}
+
+.galleryCounter {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(5, 6, 15, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-glass-edge);
+  color: var(--color-pure-white);
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: var(--font-dotdigital);
+  z-index: 2;
 }
 
 .details {
@@ -110,6 +160,33 @@
 
 .metaDot {
   opacity: 0.4;
+}
+
+.galleryActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.secondaryBtn {
+  background: var(--surface-steel-plate);
+  border: 1px solid var(--color-glass-edge);
+  color: var(--color-pure-white);
+  padding: 10px 16px;
+  border-radius: var(--radius-buttons);
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.secondaryBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-blueprint-blue);
 }
 
 .spin {

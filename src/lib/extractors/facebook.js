@@ -43,6 +43,7 @@ export class FacebookExtractor extends BaseExtractor {
         fileSize: info.filesize || info.filesize_approx || null,
         format: 'mp4',
         sourceUrl: url,
+        images: [],
       };
     } catch {
       // 2. Fallback to HTTP HTML parse for FB photos / public posts
@@ -70,39 +71,56 @@ export class FacebookExtractor extends BaseExtractor {
           ogImage = ogImage.replace(/&amp;/g, '&');
         }
 
-        // 3. Resolve direct scontent-*.fbcdn.net binary image URL if og:image is a lookaside HTML redirect page
-        if (!ogImage || ogImage.includes('lookaside.fbsbx.com')) {
-          const scontentMatches = html.match(/https:\/\/[^"'\s\\]*scontent[^"'\s\\]*/gi) || [];
-          const cleanUrls = Array.from(new Set(scontentMatches.map(u => u.replace(/&amp;/g, '&').replace(/\\/g, ''))));
-          
-          // Select high-resolution JPG binary image URL
-          const directPhotoUrl = cleanUrls.find(u => u.includes('dst-jpg') || u.includes('.jpg') || u.includes('.png')) || cleanUrls[0];
-          
-          if (directPhotoUrl) {
-            ogImage = directPhotoUrl;
-          }
+        // Search HTML for all scontent / fbcdn CDN image links
+        const scontentMatches = html.match(/https:\/\/[^"'\s\\]*fbcdn[^"'\s\\]*/gi) || [];
+        const cleanUrls = Array.from(new Set(scontentMatches.map(u => u.replace(/&amp;/g, '&').replace(/\\/g, ''))));
+        
+        // Filter out static icons/CSS/JS assets
+        const photoUrls = cleanUrls.filter(u => 
+          !u.includes('static.xx.fbcdn.net') && 
+          !u.includes('rsrc.php') && 
+          !u.includes('.ico') && 
+          !u.includes('.css') && 
+          !u.includes('.js') && 
+          !u.includes('.webp') && 
+          !u.includes('s32x32') && 
+          !u.includes('s50x50') && 
+          !u.includes('p50x50')
+        );
+
+        let imageList = [];
+        if (photoUrls.length > 0) {
+          imageList = photoUrls.map((imgUrl, idx) => ({
+            id: idx + 1,
+            url: imgUrl,
+            filename: `photo_${idx + 1}.jpg`
+          }));
+        } else if (ogImage) {
+          imageList = [{ id: 1, url: ogImage, filename: 'photo_1.jpg' }];
         }
 
-        // 4. Final FBID fallback if scontent extraction yielded nothing
-        if (!ogImage) {
+        // Final FBID fallback if scontent extraction yielded nothing
+        if (imageList.length === 0) {
           const fbidMatch = url.match(/[?&]fbid=(\d+)/) || url.match(/\/(\d+)\/?(?:\?|$)/);
           if (fbidMatch && fbidMatch[1]) {
             const fbid = fbidMatch[1];
-            ogImage = `https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=${fbid}`;
+            const fallbackUrl = `https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=${fbid}`;
+            imageList = [{ id: 1, url: fallbackUrl, filename: 'photo_1.jpg' }];
           }
         }
 
-        if (ogImage) {
+        if (imageList.length > 0) {
           return {
             platform: 'facebook',
-            mediaType: 'image',
+            mediaType: imageList.length > 1 ? 'gallery' : 'image',
             title: ogTitle,
-            thumbnail: ogImage,
+            thumbnail: imageList[0].url,
+            images: imageList,
             duration: null,
             quality: 'Original',
             fileSize: null,
-            format: 'jpg',
-            sourceUrl: ogImage,
+            format: imageList.length > 1 ? 'zip' : 'jpg',
+            sourceUrl: imageList[0].url,
           };
         }
       } catch (err) {

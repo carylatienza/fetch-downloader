@@ -40,6 +40,7 @@ export class InstagramExtractor extends BaseExtractor {
         fileSize: info.filesize || info.filesize_approx || null,
         format: info.vcodec && info.vcodec !== 'none' ? 'mp4' : 'jpg',
         sourceUrl: url,
+        images: info.thumbnail ? [{ id: 1, url: info.thumbnail, filename: 'photo_1.jpg' }] : [],
       };
     } catch {
       // 2. Try Cheerio static meta tag parse
@@ -67,6 +68,7 @@ export class InstagramExtractor extends BaseExtractor {
             fileSize: null,
             format: 'mp4',
             sourceUrl: ogVideo,
+            images: [],
           };
         }
 
@@ -81,6 +83,7 @@ export class InstagramExtractor extends BaseExtractor {
             fileSize: null,
             format: 'jpg',
             sourceUrl: ogImage,
+            images: [{ id: 1, url: ogImage, filename: 'photo_1.jpg' }],
           };
         }
       } catch (err) {
@@ -106,6 +109,7 @@ export class InstagramExtractor extends BaseExtractor {
             fileSize: null,
             format: ogVideo ? 'mp4' : 'jpg',
             sourceUrl: ogVideo || ogImage,
+            images: ogImage ? [{ id: 1, url: ogImage, filename: 'photo_1.jpg' }] : [],
           };
         }
       } catch (pErr) {

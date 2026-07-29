@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Readable } from 'stream';
+import JSZip from 'jszip';
 import { getDownloadSession } from '@/lib/sessionStore';
 import { getStreamWithYtDlp } from '@/lib/ytdlp';
 import { getClientIp, trackDownloadStart, trackDownloadEnd } from '@/lib/rateLimiter';
@@ -18,6 +19,7 @@ function sanitizeFilename(title, ext) {
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const downloadId = searchParams.get('id');
+  const singleImageUrl = searchParams.get('imageUrl');
   const ip = getClientIp(req);
 
   let session = getDownloadSession(downloadId);
@@ -35,6 +37,7 @@ export async function GET(req) {
         title: title || 'media_file',
         mediaType: mediaType || 'video',
         format: format || 'mp4',
+        images: [],
       };
     }
   }
@@ -54,11 +57,47 @@ export async function GET(req) {
   }
 
   try {
-    const filename = sanitizeFilename(session.title, session.format);
+    // 1. Batch Gallery Zip Archive Download (.zip)
+    if (session.format === 'zip' || (Array.isArray(session.images) && session.images.length > 1 && !singleImageUrl)) {
+      const zip = new JSZip();
+      const zipFilename = sanitizeFilename(session.title, 'zip');
+      const crawlerUA = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+
+      const downloadPromises = session.images.map(async (imgObj, idx) => {
+        try {
+          const imgRes = await fetch(imgObj.url, { headers: { 'User-Agent': crawlerUA } });
+          if (imgRes.ok) {
+            const arrayBuffer = await imgRes.arrayBuffer();
+            const fileName = imgObj.filename || `photo_${idx + 1}.jpg`;
+            zip.file(fileName, arrayBuffer);
+          }
+        } catch (err) {
+          console.warn(`Failed to fetch photo [${idx + 1}] for zip archive:`, err);
+        }
+      });
+
+      await Promise.all(downloadPromises);
+
+      const zipBuffer = await zip.generateAsync({ type: 'nodebuffer' });
+      trackDownloadEnd(ip);
+
+      return new Response(zipBuffer, {
+        headers: new Headers({
+          'Content-Type': 'application/zip',
+          'Content-Disposition': `attachment; filename="${zipFilename}"`,
+          'Content-Length': zipBuffer.length.toString(),
+          'Cache-Control': 'no-cache',
+        }),
+      });
+    }
+
+    // 2. Single Image Download or Video Streaming
+    const targetUrl = singleImageUrl || session.sourceUrl;
+    const filename = sanitizeFilename(session.title, session.format === 'zip' ? 'jpg' : session.format);
 
     // Video extraction & streaming via yt-dlp
-    if (session.mediaType === 'video' && session.sourceUrl.includes('http')) {
-      const nodeStream = getStreamWithYtDlp(session.sourceUrl);
+    if (session.mediaType === 'video' && targetUrl.includes('http')) {
+      const nodeStream = getStreamWithYtDlp(targetUrl);
       const webStream = Readable.toWeb(nodeStream);
 
       const responseHeaders = new Headers({
@@ -73,8 +112,8 @@ export async function GET(req) {
       return new Response(webStream, { headers: responseHeaders });
     }
 
-    // Direct HTTP fetch stream for images or direct file URLs (using Googlebot UA for social CDN compatibility)
-    const mediaResponse = await fetch(session.sourceUrl, {
+    // Direct HTTP fetch stream for images or direct file URLs
+    const mediaResponse = await fetch(targetUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
         'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
@@ -87,7 +126,7 @@ export async function GET(req) {
     }
 
     const contentType = mediaResponse.headers.get('content-type') || 
-      (session.mediaType === 'image' ? 'image/jpeg' : 'video/mp4');
+      (session.mediaType === 'image' || session.mediaType === 'gallery' ? 'image/jpeg' : 'video/mp4');
 
     const headers = new Headers({
       'Content-Type': contentType,

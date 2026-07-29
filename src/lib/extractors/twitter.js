@@ -37,6 +37,7 @@ export class TwitterExtractor extends BaseExtractor {
         fileSize: info.filesize || info.filesize_approx || null,
         format: 'mp4',
         sourceUrl: url,
+        images: [],
       };
     } catch {
       // 2. Try HTML meta tag parse for tweet images
@@ -70,6 +71,7 @@ export class TwitterExtractor extends BaseExtractor {
             fileSize: null,
             format: 'jpg',
             sourceUrl: ogImage,
+            images: [{ id: 1, url: ogImage, filename: 'photo_1.jpg' }],
           };
         }
       } catch (err) {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Download, Film, Image as ImageIcon, Check, RefreshCw, Clock, HardDrive } from 'lucide-react';
+import { Download, Film, Image as ImageIcon, Check, RefreshCw, Clock, HardDrive, ChevronLeft, ChevronRight, Archive } from 'lucide-react';
 import styles from './PreviewCard.module.css';
 
 function formatDuration(seconds) {
@@ -24,6 +24,7 @@ export default function PreviewCard({ data, onReset }) {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadCompleted, setDownloadCompleted] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [activePhotoIndex, setActivePhotoIndex] = useState(0);
 
   const {
     downloadId,
@@ -36,19 +37,39 @@ export default function PreviewCard({ data, onReset }) {
     duration,
     fileSize,
     format,
+    images = [],
   } = data;
 
-  const handleDownload = () => {
+  const isGallery = Array.isArray(images) && images.length > 1;
+  const currentImage = isGallery ? images[activePhotoIndex]?.url : (thumbnail || sourceUrl);
+
+  const handlePrevPhoto = (e) => {
+    e.stopPropagation();
+    setImageError(false);
+    setActivePhotoIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+  };
+
+  const handleNextPhoto = (e) => {
+    e.stopPropagation();
+    setImageError(false);
+    setActivePhotoIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+  };
+
+  const handleDownload = (singleUrl = null) => {
     setIsDownloading(true);
 
-    // Create self-contained download URL with session ID + fallback parameters
+    const isSingle = Boolean(singleUrl);
     const params = new URLSearchParams({
       id: downloadId || '',
-      url: sourceUrl || '',
-      title: title || 'media_file',
-      mediaType: mediaType || 'video',
-      format: format || 'mp4',
+      url: singleUrl || sourceUrl || '',
+      title: isSingle ? `${title}_photo_${activePhotoIndex + 1}` : (title || 'media_file'),
+      mediaType: isGallery && !isSingle ? 'gallery' : (mediaType || 'image'),
+      format: isGallery && !isSingle ? 'zip' : (format || 'jpg'),
     });
+
+    if (singleUrl) {
+      params.set('imageUrl', singleUrl);
+    }
 
     const downloadUrl = `/api/download?${params.toString()}`;
     const a = document.createElement('a');
@@ -67,9 +88,9 @@ export default function PreviewCard({ data, onReset }) {
   return (
     <div className={styles.card}>
       <div className={styles.thumbnailWrapper}>
-        {thumbnail && !imageError ? (
+        {currentImage && !imageError ? (
           <img
-            src={thumbnail}
+            src={currentImage}
             alt={title}
             className={styles.thumbnail}
             referrerPolicy="no-referrer"
@@ -81,10 +102,28 @@ export default function PreviewCard({ data, onReset }) {
           </div>
         )}
 
+        {isGallery && (
+          <>
+            <button onClick={handlePrevPhoto} className={`${styles.navBtn} ${styles.prevBtn}`} aria-label="Previous photo">
+              <ChevronLeft size={20} />
+            </button>
+            <button onClick={handleNextPhoto} className={`${styles.navBtn} ${styles.nextBtn}`} aria-label="Next photo">
+              <ChevronRight size={20} />
+            </button>
+            <div className={styles.galleryCounter}>
+              <span>Photo {activePhotoIndex + 1} of {images.length}</span>
+            </div>
+          </>
+        )}
+
         <div className={styles.badgeGroup}>
           <span className={styles.badge}>
-            {mediaType === 'video' ? <Film size={12} /> : <ImageIcon size={12} />}
-            <span>{mediaType === 'video' ? 'Video' : 'Image'}</span>
+            {mediaType === 'video' ? (
+              <Film size={12} />
+            ) : (
+              <ImageIcon size={12} />
+            )}
+            <span>{isGallery ? `Gallery (${images.length})` : mediaType === 'video' ? 'Video' : 'Image'}</span>
           </span>
 
           {platform && (
@@ -107,11 +146,11 @@ export default function PreviewCard({ data, onReset }) {
 
         <div className={styles.metaRow}>
           <span className={styles.metaItem}>
-            <strong>Quality:</strong> {quality || 'Best'}
+            <strong>Quality:</strong> {quality || 'Original'}
           </span>
           <span className={styles.metaDot}>•</span>
           <span className={styles.metaItem}>
-            <strong>Format:</strong> {(format || 'mp4').toUpperCase()}
+            <strong>Format:</strong> {isGallery ? 'ZIP / JPG' : (format || 'JPG').toUpperCase()}
           </span>
           {formatFileSize(fileSize) && (
             <>
@@ -124,29 +163,66 @@ export default function PreviewCard({ data, onReset }) {
           )}
         </div>
 
-        <button
-          onClick={handleDownload}
-          disabled={isDownloading}
-          className="btn-primary"
-          style={{ width: '100%', height: '48px', marginTop: '16px', fontSize: '15px' }}
-        >
-          {isDownloading ? (
-            <>
-              <RefreshCw className={styles.spin} size={18} />
-              <span>Downloading...</span>
-            </>
-          ) : downloadCompleted ? (
-            <>
-              <Check size={18} />
-              <span>Downloaded! Download Again</span>
-            </>
-          ) : (
-            <>
-              <Download size={18} />
-              <span>Download Now</span>
-            </>
-          )}
-        </button>
+        {isGallery ? (
+          <div className={styles.galleryActions}>
+            <button
+              onClick={() => handleDownload()}
+              disabled={isDownloading}
+              className="btn-primary"
+              style={{ width: '100%', height: '48px', marginTop: '16px', fontSize: '15px' }}
+            >
+              {isDownloading ? (
+                <>
+                  <RefreshCw className={styles.spin} size={18} />
+                  <span>Packaging ZIP...</span>
+                </>
+              ) : downloadCompleted ? (
+                <>
+                  <Check size={18} />
+                  <span>ZIP Downloaded! Download Again</span>
+                </>
+              ) : (
+                <>
+                  <Archive size={18} />
+                  <span>Download All {images.length} Photos (.zip)</span>
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={() => handleDownload(images[activePhotoIndex]?.url)}
+              disabled={isDownloading}
+              className={styles.secondaryBtn}
+            >
+              <Download size={14} />
+              <span>Download Photo #{activePhotoIndex + 1} Only</span>
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => handleDownload()}
+            disabled={isDownloading}
+            className="btn-primary"
+            style={{ width: '100%', height: '48px', marginTop: '16px', fontSize: '15px' }}
+          >
+            {isDownloading ? (
+              <>
+                <RefreshCw className={styles.spin} size={18} />
+                <span>Downloading...</span>
+              </>
+            ) : downloadCompleted ? (
+              <>
+                <Check size={18} />
+                <span>Downloaded! Download Again</span>
+              </>
+            ) : (
+              <>
+                <Download size={18} />
+                <span>Download Now</span>
+              </>
+            )}
+          </button>
+        )}
 
         <button onClick={onReset} className={styles.resetBtn}>
           ← Download another URL
