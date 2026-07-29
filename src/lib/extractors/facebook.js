@@ -47,17 +47,38 @@ export class FacebookExtractor extends BaseExtractor {
     } catch {
       // 2. Fallback to HTTP HTML parse for FB photos / public posts
       try {
+        // Use Facebook's official social crawler User-Agent to bypass login wall SPA redirects
         const response = await fetch(url, {
           headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'User-Agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+            'Accept-Language': 'en-US,en;q=0.9',
           },
         });
 
         const html = await response.text();
         const $ = cheerio.load(html);
 
-        const ogImage = $('meta[property="og:image"]').attr('content') || $('meta[name="twitter:image"]').attr('content');
-        const ogTitle = $('meta[property="og:title"]').attr('content') || 'Facebook Photo';
+        let ogImage = $('meta[property="og:image"]').attr('content') || 
+                       $('meta[name="twitter:image"]').attr('content') ||
+                       $('meta[name="og:image"]').attr('content');
+                       
+        let ogTitle = $('meta[property="og:title"]').attr('content') || 
+                      $('meta[name="twitter:title"]').attr('content') || 
+                      'Facebook Photo';
+
+        // Unescape HTML entities in image URL if present
+        if (ogImage) {
+          ogImage = ogImage.replace(/&amp;/g, '&');
+        }
+
+        // 3. Fallback: Parse FBID parameter if og:image wasn't in page head
+        if (!ogImage) {
+          const fbidMatch = url.match(/[?&]fbid=(\d+)/) || url.match(/\/(\d+)\/?(?:\?|$)/);
+          if (fbidMatch && fbidMatch[1]) {
+            const fbid = fbidMatch[1];
+            ogImage = `https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=${fbid}`;
+          }
+        }
 
         if (ogImage) {
           return {
