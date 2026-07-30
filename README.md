@@ -1,5 +1,7 @@
 <div align="center">
 
+  <img src="public/images/logo.png" alt="Fetch Logo" width="120" style="border-radius: 24px; margin-bottom: 16px;" />
+
   # ⚡ FETCH
   ### *Download Anything, Anywhere, Anytime.*
 
