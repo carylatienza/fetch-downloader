@@ -8,12 +8,13 @@
 
 /* ─── Hero ─── */
 .heroSection {
-  min-height: 100dvh;
+  min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-top: 80px;
+  padding-top: 120px;
+  padding-bottom: 60px;
 }
 
 .heroInner {
@@ -50,6 +51,7 @@
 .stepsSection {
   margin-bottom: var(--section-gap);
   text-align: center;
+  scroll-margin-top: 120px;
 }
 
 .sectionHeading {
