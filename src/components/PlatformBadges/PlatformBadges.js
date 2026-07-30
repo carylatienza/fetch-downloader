@@ -47,6 +47,7 @@ export default function PlatformBadges({ onSelectSample }) {
           <button
             key={name}
             type="button"
+            suppressHydrationWarning
             onClick={() => onSelectSample && onSelectSample(sampleUrl)}
             className={`${styles.badge} ${glowClass}`}
             title={`Click to test sample ${name} link (${detail})`}

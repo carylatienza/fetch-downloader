@@ -55,6 +55,7 @@ export default function FaqSection() {
             >
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={() => toggleFaq(index)}
                 className={styles.questionBtn}
                 aria-expanded={isOpen}
