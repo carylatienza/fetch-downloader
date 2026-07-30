@@ -94,7 +94,9 @@ export default function Home() {
 
             {extractedData && (
               <div className="reveal">
-                <PreviewCard data={extractedData} onReset={handleReset} />
+                <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.28)">
+                  <PreviewCard data={extractedData} onReset={handleReset} />
+                </SpotlightCard>
               </div>
             )}
           </div>
@@ -161,7 +163,7 @@ export default function Home() {
           <h2 className={`${styles.sectionHeading} reveal`}>One tool. Every platform.</h2>
 
           <div className={styles.bentoGrid}>
-            <SpotlightCard className={`${styles.bentoHero} glass-panel reveal reveal-delay-1`}>
+            <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.25)" className={`${styles.bentoHero} glass-panel reveal reveal-delay-1`}>
               <div className={styles.bentoInner}>
                 <div className={styles.featureIcon}>
                   <Shield size={24} strokeWidth={1.5} />
@@ -175,7 +177,7 @@ export default function Home() {
               </div>
             </SpotlightCard>
 
-            <SpotlightCard className={`${styles.bentoCard} glass-panel reveal reveal-delay-2`}>
+            <SpotlightCard spotlightColor="rgba(168, 200, 238, 0.25)" className={`${styles.bentoCard} glass-panel reveal reveal-delay-2`}>
               <div className={styles.bentoInner}>
                 <div className={styles.featureIcon}>
                   <Sparkles size={24} strokeWidth={1.5} />
@@ -187,7 +189,7 @@ export default function Home() {
               </div>
             </SpotlightCard>
 
-            <SpotlightCard className={`${styles.bentoCard} glass-panel reveal reveal-delay-3`}>
+            <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.25)" className={`${styles.bentoCard} glass-panel reveal reveal-delay-3`}>
               <div className={styles.bentoInner}>
                 <div className={styles.featureIcon}>
                   <Layers size={24} strokeWidth={1.5} />
