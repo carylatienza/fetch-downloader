@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
-import { Mail, Send, CheckCircle2, AlertCircle, Clock, ShieldCheck, MessageSquare } from 'lucide-react';
+import { Mail, Send, CheckCircle2, AlertCircle, Clock, ShieldCheck, MessageSquare, User, Tag } from 'lucide-react';
 import styles from './page.module.css';
 
 export default function ContactPage() {
@@ -102,36 +102,47 @@ export default function ContactPage() {
             )}
 
             <form onSubmit={handleSubmit}>
-              <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="name">Your Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  placeholder="e.g. Sarah Jenkins"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={styles.input}
-                />
+              <div className={styles.rowInputs}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label} htmlFor="name">
+                    <User size={15} className={styles.labelIcon} />
+                    <span>Your Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    placeholder="e.g. Sarah Jenkins"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className={styles.input}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.label} htmlFor="email">
+                    <Mail size={15} className={styles.labelIcon} />
+                    <span>Email Address</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="sarah@example.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={styles.input}
+                  />
+                </div>
               </div>
 
               <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="email">Email Address</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  placeholder="sarah@example.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={styles.input}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="subject">Subject Category</label>
+                <label className={styles.label} htmlFor="subject">
+                  <Tag size={15} className={styles.labelIcon} />
+                  <span>Subject Category</span>
+                </label>
                 <select
                   id="subject"
                   name="subject"
@@ -147,7 +158,10 @@ export default function ContactPage() {
               </div>
 
               <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="message">Message</label>
+                <label className={styles.label} htmlFor="message">
+                  <MessageSquare size={15} className={styles.labelIcon} />
+                  <span>Message</span>
+                </label>
                 <textarea
                   id="message"
                   name="message"
