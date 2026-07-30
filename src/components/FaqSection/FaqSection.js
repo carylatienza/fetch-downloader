@@ -51,7 +51,6 @@ export default function FaqSection() {
           return (
             <SpotlightCard
               key={faq.question}
-              spotlightColor="rgba(124, 106, 239, 0.22)"
               className={`${styles.item} glass-panel ${isOpen ? styles.itemOpen : ''}`}
             >
               <button

@@ -1,6 +1,5 @@
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
-import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
 import styles from './page.module.css';
 
 export const metadata = {
@@ -25,7 +24,7 @@ export default function PrivacyPage() {
         </p>
 
         <section className={`${styles.section} reveal`}>
-          <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.2)" className="glass-panel" style={{ padding: '40px' }}>
+          <div className="glass-panel" style={{ padding: '40px' }}>
             <h2 className={styles.sectionTitle}>1. Zero Storage Policy</h2>
             <p className={styles.paragraph}>
               Fetch does not host, store, save, or archive any extracted videos, images, or audio files on our servers. When you paste a URL, media streams are proxied directly from the official platform CDNs (YouTube, Facebook, Instagram, X) to your local browser session.
@@ -40,7 +39,7 @@ export default function PrivacyPage() {
             <p className={styles.paragraph}>
               Temporary server logs are maintained strictly for performance monitoring, rate limiting, and technical debugging. These logs are automatically purged regularly and are never shared or sold.
             </p>
-          </SpotlightCard>
+          </div>
         </section>
       </main>
       <Footer />

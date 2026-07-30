@@ -3,7 +3,12 @@
 import { useRef, useState } from 'react';
 import styles from './SpotlightCard.module.css';
 
-export default function SpotlightCard({ children, className = '', spotlightColor = 'rgba(124, 106, 239, 0.28)', ...props }) {
+export default function SpotlightCard({
+  children,
+  className = '',
+  spotlightColor = 'rgba(140, 120, 240, 0.16)',
+  ...props
+}) {
   const cardRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
 

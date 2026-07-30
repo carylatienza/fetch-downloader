@@ -220,31 +220,22 @@ html, body {
   background: linear-gradient(90deg, transparent, rgba(140, 170, 220, 0.15), transparent);
 }
 
-/* Frosted Glass Surface — Double-Bezel Technique */
+/* Frosted Glass Surface — Pure CSS Bulletproof Cards */
 .glass-panel {
   position: relative;
   background: var(--surface-frosted-glass);
   border-radius: var(--radius-cards);
+  border: 1px solid var(--color-glass-edge, rgba(170, 200, 240, 0.1));
   box-shadow: var(--shadow-frosted-card);
-  padding: 2px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
 }
 
-.glass-panel::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    rgba(255, 255, 255, 0) 60%
-  );
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  pointer-events: none;
+.glass-panel:hover {
+  transform: translateY(-4px);
+  border-color: rgba(124, 106, 239, 0.4);
+  box-shadow: 0 16px 40px -10px rgba(8, 9, 15, 0.7), 0 0 28px -4px rgba(124, 106, 239, 0.25);
 }
 
 /* Buttons */
