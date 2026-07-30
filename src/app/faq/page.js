@@ -1,6 +1,7 @@
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import FaqSection from '@/components/FaqSection/FaqSection';
+import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import styles from './page.module.css';
@@ -29,14 +30,14 @@ export default function FaqPage() {
         <FaqSection />
 
         <section className={`${styles.ctaBox} reveal`}>
-          <div className="glass-panel" style={{ padding: '48px', textAlign: 'center' }}>
+          <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.28)" className="glass-panel" style={{ padding: '48px', textAlign: 'center' }}>
             <h2 className={styles.ctaTitle}>Still have questions?</h2>
             <p className={styles.ctaDesc}>Try pasting a link directly on the home page to see how fast Fetch extracts media.</p>
             <Link href="/" className="btn-primary" style={{ marginTop: '20px', fontSize: '15px' }}>
               <span>Try Fetch Now</span>
               <ArrowRight size={16} />
             </Link>
-          </div>
+          </SpotlightCard>
         </section>
       </main>
       <Footer />

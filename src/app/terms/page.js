@@ -1,5 +1,6 @@
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
+import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
 import styles from './page.module.css';
 
 export const metadata = {
@@ -24,7 +25,7 @@ export default function TermsPage() {
         </p>
 
         <section className={`${styles.section} reveal`}>
-          <div className="glass-panel" style={{ padding: '40px' }}>
+          <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.2)" className="glass-panel" style={{ padding: '40px' }}>
             <h2 className={styles.sectionTitle}>1. Acceptance of Terms</h2>
             <p className={styles.paragraph}>
               By accessing and using Fetch, you agree to comply with these Terms of Service. If you do not agree with any part of these terms, please do not use the application.
@@ -39,7 +40,7 @@ export default function TermsPage() {
             <p className={styles.paragraph}>
               Fetch is provided on an &quot;as is&quot; and &quot;as available&quot; basis without warranties of any kind. We do not guarantee uninterrupted service or compatibility with all third-party media links.
             </p>
-          </div>
+          </SpotlightCard>
         </section>
       </main>
       <Footer />

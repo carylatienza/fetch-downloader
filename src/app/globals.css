@@ -121,7 +121,9 @@
 }
 
 /* Base CSS Reset & Background setup */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -131,7 +133,8 @@ html {
   scroll-behavior: smooth;
 }
 
-html, body {
+html,
+body {
   background-color: var(--color-midnight-canvas);
   color: var(--color-frost-glow);
   font-family: var(--font-body);
@@ -178,12 +181,10 @@ html, body {
   height: 700px;
   pointer-events: none;
   z-index: 0;
-  background: radial-gradient(
-    ellipse at 50% 40%,
-    rgba(124, 106, 239, 0.08) 0%,
-    rgba(100, 130, 180, 0.04) 40%,
-    transparent 70%
-  );
+  background: radial-gradient(ellipse at 50% 40%,
+      rgba(124, 106, 239, 0.08) 0%,
+      rgba(100, 130, 180, 0.04) 40%,
+      transparent 70%);
   filter: blur(60px);
 }
 
@@ -220,22 +221,29 @@ html, body {
   background: linear-gradient(90deg, transparent, rgba(140, 170, 220, 0.15), transparent);
 }
 
-/* Frosted Glass Surface — Pure CSS Bulletproof Cards */
+/* Frosted Glass Surface — Double-Bezel Technique */
 .glass-panel {
   position: relative;
   background: var(--surface-frosted-glass);
   border-radius: var(--radius-cards);
-  border: 1px solid var(--color-glass-edge, rgba(170, 200, 240, 0.1));
   box-shadow: var(--shadow-frosted-card);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s ease,
-              border-color 0.3s ease;
+  padding: 2px;
 }
 
-.glass-panel:hover {
-  transform: translateY(-4px);
-  border-color: rgba(124, 106, 239, 0.4);
-  box-shadow: 0 16px 40px -10px rgba(8, 9, 15, 0.7), 0 0 28px -4px rgba(124, 106, 239, 0.25);
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0) 60%);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
 }
 
 /* Buttons */
@@ -308,20 +316,40 @@ a {
 .reveal {
   opacity: 0;
   transform: translateY(24px);
-}
-
-.reveal:not(.visible) {
   transition:
     opacity var(--duration-reveal) var(--ease-out-expo),
     transform var(--duration-reveal) var(--ease-out-expo);
 }
 
 .reveal.visible {
-  opacity: 1 !important;
+  opacity: 1;
   transform: translateY(0);
 }
 
-.reveal-delay-1 { transition-delay: 0.08s; }
-.reveal-delay-2 { transition-delay: 0.16s; }
-.reveal-delay-3 { transition-delay: 0.24s; }
-.reveal-delay-4 { transition-delay: 0.32s; }
+.reveal-delay-1 {
+  transition-delay: 0.08s;
+}
+
+.reveal-delay-2 {
+  transition-delay: 0.16s;
+}
+
+.reveal-delay-3 {
+  transition-delay: 0.24s;
+}
+
+.reveal-delay-4 {
+  transition-delay: 0.32s;
+}
+
+.reveal-delay-2 {
+  transition-delay: 0.16s;
+}
+
+.reveal-delay-3 {
+  transition-delay: 0.24s;
+}
+
+.reveal-delay-4 {
+  transition-delay: 0.32s;
+}

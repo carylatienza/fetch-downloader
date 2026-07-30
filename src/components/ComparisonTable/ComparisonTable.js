@@ -54,7 +54,7 @@ export default function ComparisonTable() {
         No popups, no misleading buttons, no silent compression.
       </p>
 
-      <SpotlightCard className={`${styles.tableWrapper} glass-panel reveal`}>
+      <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.2)" className={`${styles.tableWrapper} glass-panel reveal`}>
         <table className={styles.table}>
           <thead>
             <tr>
