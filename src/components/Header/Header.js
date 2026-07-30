@@ -24,11 +24,12 @@ export default function Header() {
           <Link href="/about" className={styles.navLink}>About</Link>
           <Link href="/how-it-works" className={styles.navLink}>How It Works</Link>
           <Link href="/faq" className={styles.navLink}>FAQ</Link>
+          <Link href="/contact" className={styles.navLink}>Contact</Link>
         </nav>
 
         <div className={styles.actions}>
           <a
-            href="https://github.com"
+            href="https://github.com/carylatienza/fetch-downloader"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-ghost"

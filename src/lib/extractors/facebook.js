@@ -48,14 +48,16 @@ export class FacebookExtractor extends BaseExtractor {
     } catch {
       // 2. Fallback to HTTP HTML parse for FB photos / public posts
       try {
-        // Use Googlebot User-Agent to bypass login wall SPA and expose direct scontent CDN image URLs
+        // Use Googlebot User-Agent with redirect follow to handle /share/p/ and /share/v/ links
         const response = await fetch(url, {
+          redirect: 'follow',
           headers: {
             'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
             'Accept-Language': 'en-US,en;q=0.9',
           },
         });
 
+        const finalUrl = response.url || url;
         const html = await response.text();
         const $ = cheerio.load(html);
 
@@ -106,7 +108,10 @@ export class FacebookExtractor extends BaseExtractor {
 
         // Final FBID fallback if scontent extraction yielded nothing
         if (imageList.length === 0) {
-          const fbidMatch = url.match(/[?&]fbid=(\d+)/) || url.match(/\/(\d+)\/?(?:\?|$)/);
+          const fbidMatch = finalUrl.match(/[?&]fbid=(\d+)/) || 
+                            url.match(/[?&]fbid=(\d+)/) || 
+                            finalUrl.match(/\/(\d+)\/?(?:\?|$)/) ||
+                            url.match(/\/(\d+)\/?(?:\?|$)/);
           if (fbidMatch && fbidMatch[1]) {
             const fbid = fbidMatch[1];
             const fallbackUrl = `https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=${fbid}`;

@@ -70,12 +70,21 @@ export function getStreamWithYtDlp(url) {
     url
   ];
 
-  const cmdInfo = getCommandArgs(commonArgs);
-  const proc = spawn(cmdInfo.command, cmdInfo.args);
+  try {
+    const cmdInfo = getCommandArgs(commonArgs);
+    const proc = spawn(cmdInfo.command, cmdInfo.args);
 
-  proc.stderr?.on('data', (data) => {
-    console.warn(`[yt-dlp stderr]: ${data.toString()}`);
-  });
+    proc.stderr?.on('data', (data) => {
+      console.warn(`[yt-dlp stderr]: ${data.toString()}`);
+    });
 
-  return proc.stdout;
+    proc.on('error', (err) => {
+      console.warn('yt-dlp spawn error:', err);
+    });
+
+    return proc.stdout;
+  } catch (error) {
+    console.warn('getStreamWithYtDlp failed:', error);
+    return null;
+  }
 }

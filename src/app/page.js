@@ -38,7 +38,7 @@ export default function Home() {
         throw new Error(data.error || 'Failed to extract media details.');
       }
 
-      setExtractedData(data);
+      setExtractedData(data.data || data);
     } catch (err) {
       setError(err.message);
     } finally {

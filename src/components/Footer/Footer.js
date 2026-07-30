@@ -24,6 +24,7 @@ export default function Footer() {
             <Link href="/about" className={styles.link}>About</Link>
             <Link href="/how-it-works" className={styles.link}>How it works</Link>
             <Link href="/faq" className={styles.link}>FAQ</Link>
+            <Link href="/contact" className={styles.link}>Contact</Link>
           </nav>
         </div>
 

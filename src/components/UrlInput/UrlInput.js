@@ -4,13 +4,17 @@ import { useState, useEffect } from 'react';
 import { Link2, ArrowRight, X } from 'lucide-react';
 import styles from './UrlInput.module.css';
 
-export default function UrlInput({ onSubmit, isLoading, initialValue = '' }) {
-  const [url, setUrl] = useState(initialValue);
+export default function UrlInput({ onSubmit, onExtract, isLoading, initialValue = '', externalUrl = '' }) {
+  const initial = externalUrl || initialValue;
+  const extractHandler = onExtract || onSubmit;
+  const [url, setUrl] = useState(initial);
   const [validationError, setValidationError] = useState('');
 
   useEffect(() => {
-    setUrl(initialValue);
-  }, [initialValue]);
+    if (initial) {
+      setUrl(initial);
+    }
+  }, [initial]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,7 +36,9 @@ export default function UrlInput({ onSubmit, isLoading, initialValue = '' }) {
       return;
     }
 
-    onSubmit(trimmed);
+    if (extractHandler) {
+      extractHandler(trimmed);
+    }
   };
 
   const handleClear = () => {

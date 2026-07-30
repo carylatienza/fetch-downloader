@@ -11,7 +11,17 @@ export function isValidUrl(urlString) {
   if (!urlString || typeof urlString !== 'string') return false;
   try {
     const parsed = new URL(urlString.trim());
-    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+    
+    const host = parsed.hostname.toLowerCase();
+    const supportedDomains = [
+      'youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be',
+      'instagram.com', 'www.instagram.com',
+      'facebook.com', 'www.facebook.com', 'm.facebook.com', 'fb.watch', 'fb.com',
+      'twitter.com', 'www.twitter.com', 'x.com', 'www.x.com'
+    ];
+
+    return supportedDomains.some(domain => host === domain || host.endsWith('.' + domain));
   } catch {
     return false;
   }

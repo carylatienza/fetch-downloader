@@ -1,6 +1,13 @@
 import { BaseExtractor } from './base.js';
 import { getMetadataWithYtDlp } from '../ytdlp.js';
 
+function extractYouTubeVideoId(url) {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|shorts\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+}
+
 export class YouTubeExtractor extends BaseExtractor {
   constructor() {
     super('youtube');
@@ -43,7 +50,7 @@ export class YouTubeExtractor extends BaseExtractor {
         platform: 'youtube',
         mediaType: 'video',
         title: info.title || 'YouTube Video',
-        thumbnail: info.thumbnail || `https://img.youtube.com/vi/${info.id}/maxresdefault.jpg`,
+        thumbnail: info.thumbnail || `https://img.youtube.com/vi/${info.id}/hqdefault.jpg`,
         duration: info.duration || null,
         quality: qualityStr,
         fileSize: info.filesize || info.filesize_approx || null,
@@ -51,7 +58,21 @@ export class YouTubeExtractor extends BaseExtractor {
         sourceUrl: url,
       };
     } catch (error) {
-      console.error('YouTube extraction error:', error);
+      console.warn('yt-dlp metadata extraction failed, trying video ID fallback:', error);
+      const videoId = extractYouTubeVideoId(url);
+      if (videoId) {
+        return {
+          platform: 'youtube',
+          mediaType: 'video',
+          title: 'YouTube Video',
+          thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+          duration: null,
+          quality: '1080p (Full HD)',
+          fileSize: null,
+          format: 'mp4',
+          sourceUrl: url,
+        };
+      }
       throw new Error('Failed to extract YouTube video');
     }
   }

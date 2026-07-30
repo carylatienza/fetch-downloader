@@ -56,16 +56,17 @@ export async function GET(req) {
   // Fallback: if session was lost due to server restart or TTL, reconstruct from query params
   if (!session) {
     const sourceUrl = searchParams.get('url');
+    const mediaUrl = searchParams.get('mediaUrl');
     const title = searchParams.get('title');
     const mediaType = searchParams.get('mediaType');
     const format = searchParams.get('format');
 
-    if (sourceUrl) {
+    if (sourceUrl || mediaUrl || singleImageUrl) {
       session = {
-        sourceUrl,
+        sourceUrl: mediaUrl || singleImageUrl || sourceUrl,
         title: title || 'media_file',
-        mediaType: mediaType || 'video',
-        format: format || 'mp4',
+        mediaType: mediaType || (mediaUrl ? 'image' : 'video'),
+        format: format || 'jpg',
         images: [],
       };
     }
@@ -121,24 +122,30 @@ export async function GET(req) {
     }
 
     // 2. Single Image Download or Video Streaming
-    const targetUrl = singleImageUrl || session.sourceUrl;
+    const targetUrl = singleImageUrl || searchParams.get('mediaUrl') || session.sourceUrl;
     const filename = sanitizeFilename(session.title, session.format === 'zip' ? 'jpg' : session.format);
 
-    // Video extraction & streaming via yt-dlp
+    // Video extraction & streaming via yt-dlp (if binary is available)
     if (session.mediaType === 'video' && targetUrl.includes('http')) {
-      const nodeStream = getStreamWithYtDlp(targetUrl);
-      const webStream = Readable.toWeb(nodeStream);
+      try {
+        const nodeStream = getStreamWithYtDlp(targetUrl);
+        if (nodeStream) {
+          const webStream = Readable.toWeb(nodeStream);
 
-      const responseHeaders = new Headers({
-        'Content-Type': 'video/mp4',
-        'Content-Disposition': `attachment; filename="${filename}"`,
-        'Cache-Control': 'no-cache',
-      });
+          const responseHeaders = new Headers({
+            'Content-Type': 'video/mp4',
+            'Content-Disposition': `attachment; filename="${filename}"`,
+            'Cache-Control': 'no-cache',
+          });
 
-      nodeStream.on('end', () => trackDownloadEnd(ip));
-      nodeStream.on('error', () => trackDownloadEnd(ip));
+          nodeStream.on('end', () => trackDownloadEnd(ip));
+          nodeStream.on('error', () => trackDownloadEnd(ip));
 
-      return new Response(webStream, { headers: responseHeaders });
+          return new Response(webStream, { headers: responseHeaders });
+        }
+      } catch (err) {
+        console.warn('yt-dlp stream failed, falling back to direct HTTP fetch stream:', err);
+      }
     }
 
     // Direct HTTP fetch stream for images or direct file URLs
@@ -149,16 +156,17 @@ export async function GET(req) {
       },
     });
 
-    if (!mediaResponse.ok) {
+    const contentType = mediaResponse.headers.get('content-type') || '';
+    if (session.mediaType === 'video' && (contentType.includes('text/html') || contentType.includes('image/'))) {
       trackDownloadEnd(ip);
-      throw new Error(`Failed to fetch media from source: ${mediaResponse.statusText}`);
+      throw new Error('Video stream unavailable. Direct video extraction requires yt-dlp binary or direct stream URL.');
     }
 
-    const contentType = mediaResponse.headers.get('content-type') || 
+    const finalContentType = contentType || 
       (session.mediaType === 'image' || session.mediaType === 'gallery' ? 'image/jpeg' : 'video/mp4');
 
     const headers = new Headers({
-      'Content-Type': contentType.includes('text') ? 'image/jpeg' : contentType,
+      'Content-Type': finalContentType.includes('text') ? 'image/jpeg' : finalContentType,
       'Content-Disposition': isPreview ? 'inline' : `attachment; filename="${filename}"`,
       'Cache-Control': 'no-cache',
     });

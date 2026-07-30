@@ -72,42 +72,101 @@ export default function PreviewCard({ data, onReset }) {
     setActivePhotoIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
   };
 
-  const handleDownload = () => {
+  const [downloadError, setDownloadError] = useState(null);
+
+  const handleDownload = async () => {
     setIsDownloading(true);
     setDownloadCompleted(false);
+    setDownloadError(null);
 
-    const downloadUrl = `/api/download?id=${encodeURIComponent(downloadId || '')}&url=${encodeURIComponent(sourceUrl || '')}&index=${activePhotoIndex}`;
-    
-    const a = document.createElement('a');
-    a.href = downloadUrl;
-    a.download = '';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    try {
+      const targetMediaUrl = isGallery
+        ? (images[activePhotoIndex]?.url || rawImage)
+        : (mediaType === 'video' ? (sourceUrl || rawImage) : (thumbnail || sourceUrl));
+      const downloadUrl = `/api/download?id=${encodeURIComponent(downloadId || '')}&url=${encodeURIComponent(sourceUrl || '')}&mediaUrl=${encodeURIComponent(targetMediaUrl || '')}&mediaType=${encodeURIComponent(mediaType || 'image')}&title=${encodeURIComponent(title || 'media_file')}&format=${encodeURIComponent(format || 'jpg')}`;
+      
+      const response = await fetch(downloadUrl);
+      
+      if (!response.ok) {
+        let errMsg = 'Download failed. The media file may be unavailable.';
+        try {
+          const errData = await response.json();
+          if (errData?.error?.message) {
+            errMsg = errData.error.message;
+          }
+        } catch {}
+        throw new Error(errMsg);
+      }
 
-    setTimeout(() => {
-      setIsDownloading(false);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      const contentType = response.headers.get('content-type') || '';
+      let ext = format || (mediaType === 'video' ? 'mp4' : 'jpg');
+      if (contentType.includes('image/jpeg')) ext = 'jpg';
+      else if (contentType.includes('image/png')) ext = 'png';
+      else if (contentType.includes('video/mp4')) ext = 'mp4';
+      else if (contentType.includes('application/zip')) ext = 'zip';
+
+      const downloadFilename = `${(title || 'media_file').replace(/[^a-zA-Z0-9_-]/g, '_')}.${ext}`;
+
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = downloadFilename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+
       setDownloadCompleted(true);
-    }, 1500);
+    } catch (err) {
+      console.error('Download error:', err);
+      setDownloadError(err.message || 'Failed to download media file');
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
-  const handleDownloadZip = () => {
+  const handleDownloadZip = async () => {
     setIsDownloading(true);
     setDownloadCompleted(false);
+    setDownloadError(null);
 
-    const downloadUrl = `/api/download?id=${encodeURIComponent(downloadId || '')}&url=${encodeURIComponent(sourceUrl || '')}&zip=true`;
-    
-    const a = document.createElement('a');
-    a.href = downloadUrl;
-    a.download = '';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    try {
+      const downloadUrl = `/api/download?id=${encodeURIComponent(downloadId || '')}&url=${encodeURIComponent(sourceUrl || '')}&zip=true&title=${encodeURIComponent(title || 'media_file')}`;
+      
+      const response = await fetch(downloadUrl);
 
-    setTimeout(() => {
-      setIsDownloading(false);
+      if (!response.ok) {
+        let errMsg = 'ZIP download failed. Media files may be unavailable.';
+        try {
+          const errData = await response.json();
+          if (errData?.error?.message) {
+            errMsg = errData.error.message;
+          }
+        } catch {}
+        throw new Error(errMsg);
+      }
+
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const downloadFilename = `${(title || 'gallery').replace(/[^a-zA-Z0-9_-]/g, '_')}.zip`;
+
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = downloadFilename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+
       setDownloadCompleted(true);
-    }, 1500);
+    } catch (err) {
+      console.error('ZIP Download error:', err);
+      setDownloadError(err.message || 'Failed to download ZIP archive');
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -250,6 +309,12 @@ export default function PreviewCard({ data, onReset }) {
               </>
             )}
           </button>
+        )}
+
+        {downloadError && (
+          <div style={{ color: '#ff4d4d', fontSize: '0.85rem', marginTop: '0.75rem', textAlign: 'center', background: 'rgba(255, 77, 77, 0.1)', padding: '0.5rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(255, 77, 77, 0.2)' }}>
+            ⚠️ {downloadError}
+          </div>
         )}
 
         <button onClick={onReset} className={styles.resetBtn}>

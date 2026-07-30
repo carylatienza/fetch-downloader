@@ -75,3 +75,30 @@ export function trackDownloadEnd(ip) {
     activeDownloads.set(ip, current - 1);
   }
 }
+
+const contactRequests = new Map();
+const CONTACT_WINDOW_MS = 5 * 60 * 1000;
+const MAX_CONTACT_REQUESTS = 3;
+
+/**
+ * Check and record a contact form submission request
+ * @param {string} ip 
+ * @returns {{ allowed: boolean, retryAfter?: number }}
+ */
+export function checkContactRateLimit(ip) {
+  const now = Date.now();
+  const timestamps = contactRequests.get(ip) || [];
+
+  const validTimestamps = timestamps.filter((ts) => now - ts < CONTACT_WINDOW_MS);
+
+  if (validTimestamps.length >= MAX_CONTACT_REQUESTS) {
+    const oldest = validTimestamps[0];
+    const retryAfter = Math.ceil((CONTACT_WINDOW_MS - (now - oldest)) / 1000);
+    return { allowed: false, retryAfter };
+  }
+
+  validTimestamps.push(now);
+  contactRequests.set(ip, validTimestamps);
+  return { allowed: true };
+}
+
