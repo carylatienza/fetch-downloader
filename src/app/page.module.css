@@ -22,24 +22,6 @@
   margin: 0 auto;
 }
 
-.featureBadge {
-  background: var(--color-accent-soft);
-  border: 1px solid rgba(124, 106, 239, 0.25);
-  color: var(--color-blueprint-blue);
-  padding: 4px 14px;
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: var(--font-weight-medium);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  letter-spacing: 0.02em;
-}
-
-.badgeSparkle {
-  color: var(--color-accent);
-}
-
 .title {
   font-family: var(--font-display);
   font-size: clamp(72px, 12vw, 140px);

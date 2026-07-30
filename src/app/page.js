@@ -60,9 +60,10 @@ export default function Home() {
         {/* Hero Section */}
         <section className={styles.heroSection}>
           <div className={styles.heroInner}>
-            <div className={`${styles.featureBadge} reveal`}>
-              <Sparkles size={12} className={styles.badgeSparkle} />
-              <span>100% Free · No Ads · Multi-Photo ZIP Download</span>
+            <div className="eyebrow-container reveal">
+              <div className="eyebrow-line" />
+              <span className="eyebrow-label">Download Anything, Anywhere, Anytime</span>
+              <div className="eyebrow-line" />
             </div>
 
             <h1 className={`${styles.title} text-gradient-ice reveal reveal-delay-1`}>Fetch</h1>
