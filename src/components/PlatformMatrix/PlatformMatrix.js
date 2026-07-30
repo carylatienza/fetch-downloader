@@ -65,12 +65,6 @@ const PLATFORM_DATA = [
 export default function PlatformMatrix() {
   return (
     <section className={styles.section}>
-      <div className="eyebrow-container reveal">
-        <div className="eyebrow-line" />
-        <span className="eyebrow-label">Supported Media Capabilities</span>
-        <div className="eyebrow-line" />
-      </div>
-
       <h2 className={`${styles.heading} reveal`}>Full capability matrix.</h2>
       <p className={`${styles.subheading} reveal`}>
         Fetch extracts maximum quality directly from platform CDNs across all four major networks.

@@ -43,12 +43,6 @@ const COMPARISON_ROWS = [
 export default function ComparisonTable() {
   return (
     <section className={styles.section}>
-      <div className="eyebrow-container reveal">
-        <div className="eyebrow-line" />
-        <span className="eyebrow-label">Why We Built Fetch</span>
-        <div className="eyebrow-line" />
-      </div>
-
       <h2 className={`${styles.heading} reveal`}>Fetch vs. typical downloader sites.</h2>
       <p className={`${styles.subheading} reveal`}>
         No popups, no misleading buttons, no silent compression.

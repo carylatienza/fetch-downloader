@@ -74,7 +74,7 @@
 
   /* Layout */
   --page-max-width: 1200px;
-  --section-gap: 140px;
+  --section-gap: clamp(72px, 8vw, 104px);
   --card-padding: 24px;
 
   /* Border Radius */

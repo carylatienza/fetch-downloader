@@ -23,6 +23,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata = {
   title: 'Fetch — Download Videos & Images from Any Platform',
   description: 'Download videos and images from YouTube, Facebook, Instagram, and X in maximum available quality. Free, fast, ad-free.',
+  icons: {
+    icon: '/images/logo.png',
+    shortcut: '/images/logo.png',
+    apple: '/images/logo.png',
+  },
   openGraph: {
     title: 'Fetch — Download Videos & Images from Any Platform',
     description: 'The all-in-one media downloader. Grab videos and images from YouTube, Facebook, Instagram, and X.',

@@ -103,12 +103,6 @@ export default function Home() {
 
         {/* How It Works */}
         <section className={styles.stepsSection}>
-          <div className="eyebrow-container reveal">
-            <div className="eyebrow-line" />
-            <span className="eyebrow-label">How it works</span>
-            <div className="eyebrow-line" />
-          </div>
-
           <h2 className={`${styles.sectionHeading} reveal`}>Three steps. That&apos;s it.</h2>
 
           <div className={styles.stepsTimeline}>

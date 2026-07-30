@@ -37,12 +37,6 @@ export default function FaqSection() {
 
   return (
     <section className={styles.section}>
-      <div className="eyebrow-container reveal">
-        <div className="eyebrow-line" />
-        <span className="eyebrow-label">Frequently Asked Questions</span>
-        <div className="eyebrow-line" />
-      </div>
-
       <h2 className={`${styles.heading} reveal`}>Got questions? We&apos;ve got answers.</h2>
 
       <div className={styles.accordion}>

@@ -16,12 +16,12 @@
   font-size: 16px;
   color: var(--color-fog-veil);
   max-width: 520px;
-  margin: 0 auto 48px;
+  margin: 0 auto 36px;
   line-height: 1.6;
 }
 
 .tableWrapper {
-  max-width: 880px;
+  max-width: 1040px;
   margin: 0 auto;
   overflow-x: auto;
   border-radius: var(--radius-cards);
