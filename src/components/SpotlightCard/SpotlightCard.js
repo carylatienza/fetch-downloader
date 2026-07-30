@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import styles from './SpotlightCard.module.css';
 
 export default function SpotlightCard({
@@ -10,7 +10,6 @@ export default function SpotlightCard({
   ...props
 }) {
   const cardRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
@@ -22,21 +21,11 @@ export default function SpotlightCard({
     cardRef.current.style.setProperty('--card-y', `${y}px`);
   };
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
   return (
     <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className={`${styles.spotlightCard} ${isHovered ? styles.hovered : ''} ${className}`}
+      className={`${styles.spotlightCard} ${className}`}
       style={{ '--spotlight-color': spotlightColor }}
       {...props}
     >

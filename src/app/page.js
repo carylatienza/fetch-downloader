@@ -93,10 +93,8 @@ export default function Home() {
             )}
 
             {extractedData && (
-              <div className="reveal">
-                <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.28)">
-                  <PreviewCard data={extractedData} onReset={handleReset} />
-                </SpotlightCard>
+              <div>
+                <PreviewCard data={extractedData} onReset={handleReset} />
               </div>
             )}
           </div>
@@ -113,7 +111,7 @@ export default function Home() {
           <h2 className={`${styles.sectionHeading} reveal`}>Three steps. That&apos;s it.</h2>
 
           <div className={styles.stepsTimeline}>
-            <div className={`${styles.step} reveal reveal-delay-1`}>
+            <div className={styles.step}>
               <div className={styles.stepNumber}>01</div>
               <div className={styles.stepContent}>
                 <div className={styles.stepIconWrap}>
@@ -126,7 +124,7 @@ export default function Home() {
 
             <div className={styles.stepConnector} aria-hidden="true" />
 
-            <div className={`${styles.step} reveal reveal-delay-2`}>
+            <div className={styles.step}>
               <div className={styles.stepNumber}>02</div>
               <div className={styles.stepContent}>
                 <div className={styles.stepIconWrap}>
@@ -139,7 +137,7 @@ export default function Home() {
 
             <div className={styles.stepConnector} aria-hidden="true" />
 
-            <div className={`${styles.step} reveal reveal-delay-3`}>
+            <div className={styles.step}>
               <div className={styles.stepNumber}>03</div>
               <div className={styles.stepContent}>
                 <div className={styles.stepIconWrap}>
@@ -163,7 +161,7 @@ export default function Home() {
           <h2 className={`${styles.sectionHeading} reveal`}>One tool. Every platform.</h2>
 
           <div className={styles.bentoGrid}>
-            <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.25)" className={`${styles.bentoHero} glass-panel reveal reveal-delay-1`}>
+            <SpotlightCard className={`${styles.bentoHero} glass-panel`}>
               <div className={styles.bentoInner}>
                 <div className={styles.featureIcon}>
                   <Shield size={24} strokeWidth={1.5} />
@@ -177,7 +175,7 @@ export default function Home() {
               </div>
             </SpotlightCard>
 
-            <SpotlightCard spotlightColor="rgba(168, 200, 238, 0.25)" className={`${styles.bentoCard} glass-panel reveal reveal-delay-2`}>
+            <SpotlightCard className={`${styles.bentoCard} glass-panel`}>
               <div className={styles.bentoInner}>
                 <div className={styles.featureIcon}>
                   <Sparkles size={24} strokeWidth={1.5} />
@@ -189,7 +187,7 @@ export default function Home() {
               </div>
             </SpotlightCard>
 
-            <SpotlightCard spotlightColor="rgba(124, 106, 239, 0.25)" className={`${styles.bentoCard} glass-panel reveal reveal-delay-3`}>
+            <SpotlightCard className={`${styles.bentoCard} glass-panel`}>
               <div className={styles.bentoInner}>
                 <div className={styles.featureIcon}>
                   <Layers size={24} strokeWidth={1.5} />

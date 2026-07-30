@@ -81,7 +81,7 @@ export default function PlatformMatrix() {
           <SpotlightCard
             key={id}
             spotlightColor={spotlightColor}
-            className={`${styles.card} ${cardClass} glass-panel reveal`}
+            className={`${styles.card} ${cardClass} glass-panel`}
           >
             <div className={styles.cardHeader}>
               <div className={styles.iconWrap}>

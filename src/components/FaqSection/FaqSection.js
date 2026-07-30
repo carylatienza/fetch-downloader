@@ -45,13 +45,12 @@ export default function FaqSection() {
 
       <h2 className={`${styles.heading} reveal`}>Got questions? We&apos;ve got answers.</h2>
 
-      <div className={`${styles.accordion} reveal`}>
+      <div className={styles.accordion}>
         {FAQS.map((faq, index) => {
           const isOpen = openIndex === index;
           return (
             <SpotlightCard
               key={faq.question}
-              spotlightColor="rgba(124, 106, 239, 0.22)"
               className={`${styles.item} glass-panel ${isOpen ? styles.itemOpen : ''}`}
             >
               <button
