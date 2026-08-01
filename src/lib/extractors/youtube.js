@@ -1,5 +1,5 @@
 import { BaseExtractor } from './base.js';
-import { getMetadataWithYtDlp } from '../ytdlp.js';
+import { getMetadataWithYtDlp, estimateFileSize } from '../ytdlp.js';
 
 function extractYouTubeVideoId(url) {
   if (!url) return null;
@@ -53,7 +53,7 @@ export class YouTubeExtractor extends BaseExtractor {
         thumbnail: info.thumbnail || `https://img.youtube.com/vi/${info.id}/hqdefault.jpg`,
         duration: info.duration || null,
         quality: qualityStr,
-        fileSize: info.filesize || info.filesize_approx || null,
+        fileSize: estimateFileSize(info),
         format: 'mp4',
         sourceUrl: url,
       };

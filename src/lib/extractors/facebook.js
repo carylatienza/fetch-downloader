@@ -1,5 +1,5 @@
 import { BaseExtractor } from './base.js';
-import { getMetadataWithYtDlp } from '../ytdlp.js';
+import { getMetadataWithYtDlp, estimateFileSize } from '../ytdlp.js';
 import * as cheerio from 'cheerio';
 
 export class FacebookExtractor extends BaseExtractor {
@@ -40,7 +40,7 @@ export class FacebookExtractor extends BaseExtractor {
         thumbnail: info.thumbnail || '',
         duration: info.duration || null,
         quality: qualityStr,
-        fileSize: info.filesize || info.filesize_approx || null,
+        fileSize: estimateFileSize(info),
         format: 'mp4',
         sourceUrl: url,
         images: [],
@@ -73,40 +73,18 @@ export class FacebookExtractor extends BaseExtractor {
           ogImage = ogImage.replace(/&amp;/g, '&');
         }
 
-        // Search HTML for all scontent / fbcdn CDN image links
-        const scontentMatches = html.match(/https:\/\/[^"'\s\\]*fbcdn[^"'\s\\]*/gi) || [];
-        const cleanUrls = Array.from(new Set(scontentMatches.map(u => u.replace(/&amp;/g, '&').replace(/\\/g, ''))));
-        
-        // Filter out static icons/CSS/JS assets and default avatar silhouette icons
-        let photoUrls = cleanUrls.filter(u => 
-          !u.includes('static.xx.fbcdn.net') && 
-          !u.includes('rsrc.php') && 
-          !u.includes('.ico') && 
-          !u.includes('.css') && 
-          !u.includes('.js') && 
-          !u.includes('.webp') && 
-          !u.includes('30497-1') && 
-          !u.includes('s32x32') && 
-          !u.includes('s40x40') && 
-          !u.includes('s50x50') && 
-          !u.includes('p40x40') && 
-          !u.includes('p50x50')
-        );
-
-        if (ogImage && !photoUrls.includes(ogImage) && !ogImage.includes('30497-1')) {
-          photoUrls.unshift(ogImage);
-        }
-
+        // Trust only og:image for the post's actual cover photo. Scraping every
+        // fbcdn.net URL on the page also picks up comment reaction stickers and
+        // avatars, misrepresenting them as post photos. Full carousel/album
+        // support would need Facebook's embedded post JSON, which is out of
+        // scope here (see fix-facebook-extraction / multi-photo-gallery-carousel
+        // openspec proposals for prior attempts at this).
         let imageList = [];
-        if (photoUrls.length > 0) {
-          imageList = photoUrls.map((imgUrl, idx) => ({
-            id: idx + 1,
-            url: imgUrl,
-            filename: `photo_${idx + 1}.jpg`
-          }));
+        if (ogImage && !ogImage.includes('30497-1')) {
+          imageList = [{ id: 1, url: ogImage, filename: 'photo_1.jpg' }];
         }
 
-        // Final FBID fallback if scontent extraction yielded nothing
+        // Final FBID fallback if og:image extraction yielded nothing
         if (imageList.length === 0) {
           const fbidMatch = finalUrl.match(/[?&]fbid=(\d+)/) || 
                             url.match(/[?&]fbid=(\d+)/) || 

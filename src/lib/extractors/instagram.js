@@ -1,7 +1,51 @@
 import { BaseExtractor } from './base.js';
-import { getMetadataWithYtDlp } from '../ytdlp.js';
+import { getMetadataWithYtDlp, estimateFileSize } from '../ytdlp.js';
 import * as cheerio from 'cheerio';
 import { getRenderedHtml } from '../puppeteer.js';
+
+/**
+ * Instagram embeds each carousel item's full-resolution photo as a
+ * display_url field in inline JSON. Public/logged-out pages usually only
+ * expose one, but grab every match in case more are present.
+ */
+function extractCarouselImages(html) {
+  const matches = [...html.matchAll(/"display_url":"([^"]+)"/g)]
+    .map((m) => m[1].replace(/\\u0026/g, '&').replace(/\\\//g, '/'));
+  return Array.from(new Set(matches)).filter((u) => !u.includes('150x150'));
+}
+
+/**
+ * Build an image/gallery result from a page's HTML: prefers the carousel
+ * scrape (full-res, possibly multiple photos) over the single cropped
+ * og:image meta tag.
+ */
+function buildImageResult(html, ogTitle) {
+  const $ = cheerio.load(html);
+  const ogImage = $('meta[property="og:image"]').attr('content');
+  const carouselImages = extractCarouselImages(html);
+  const photoUrls = carouselImages.length > 0 ? carouselImages : (ogImage ? [ogImage] : []);
+
+  if (photoUrls.length === 0) return null;
+
+  const images = photoUrls.map((imgUrl, idx) => ({
+    id: idx + 1,
+    url: imgUrl,
+    filename: `photo_${idx + 1}.jpg`,
+  }));
+
+  return {
+    platform: 'instagram',
+    mediaType: images.length > 1 ? 'gallery' : 'image',
+    title: ogTitle,
+    thumbnail: images[0].url,
+    images,
+    duration: null,
+    quality: 'Original',
+    fileSize: null,
+    format: images.length > 1 ? 'zip' : 'jpg',
+    sourceUrl: images[0].url,
+  };
+}
 
 export class InstagramExtractor extends BaseExtractor {
   constructor() {
@@ -17,9 +61,16 @@ export class InstagramExtractor extends BaseExtractor {
   }
 
   async extract(url) {
-    // 1. Try yt-dlp (works for reels & public video posts)
+    // 1. Try yt-dlp - reliable for actual video posts/reels
     try {
       const info = await getMetadataWithYtDlp(url);
+
+      if (!info.vcodec || info.vcodec === 'none') {
+        // Not a real video: yt-dlp only reports a cropped preview thumbnail
+        // for image posts, so fall through to the HTML scrape for the real
+        // full-resolution photo(s) instead.
+        throw new Error('Instagram image post - use HTML scrape for full-res photo');
+      }
 
       let maxHeight = info.height || 0;
       if (Array.isArray(info.formats)) {
@@ -32,18 +83,18 @@ export class InstagramExtractor extends BaseExtractor {
 
       return {
         platform: 'instagram',
-        mediaType: info.vcodec && info.vcodec !== 'none' ? 'video' : 'image',
+        mediaType: 'video',
         title: info.title || info.description || 'Instagram Post',
         thumbnail: info.thumbnail || '',
         duration: info.duration || null,
         quality: maxHeight > 0 ? `${maxHeight}p` : 'HD',
-        fileSize: info.filesize || info.filesize_approx || null,
-        format: info.vcodec && info.vcodec !== 'none' ? 'mp4' : 'jpg',
+        fileSize: estimateFileSize(info),
+        format: 'mp4',
         sourceUrl: url,
-        images: info.thumbnail ? [{ id: 1, url: info.thumbnail, filename: 'photo_1.jpg' }] : [],
+        images: [],
       };
     } catch {
-      // 2. Try Cheerio static meta tag parse
+      // 2. Try static HTML parse (og:video for videos, carousel-aware image scrape)
       try {
         const response = await fetch(url, {
           headers: {
@@ -72,20 +123,8 @@ export class InstagramExtractor extends BaseExtractor {
           };
         }
 
-        if (ogImage) {
-          return {
-            platform: 'instagram',
-            mediaType: 'image',
-            title: ogTitle,
-            thumbnail: ogImage,
-            duration: null,
-            quality: 'Original',
-            fileSize: null,
-            format: 'jpg',
-            sourceUrl: ogImage,
-            images: [{ id: 1, url: ogImage, filename: 'photo_1.jpg' }],
-          };
-        }
+        const imageResult = buildImageResult(html, ogTitle);
+        if (imageResult) return imageResult;
       } catch (err) {
         console.warn('Instagram static parse failed, trying Puppeteer:', err);
       }
@@ -97,21 +136,25 @@ export class InstagramExtractor extends BaseExtractor {
 
         const ogVideo = $('meta[property="og:video"]').attr('content');
         const ogImage = $('meta[property="og:image"]').attr('content');
+        const ogTitle = $('meta[property="og:title"]').attr('content') || 'Instagram Post';
 
-        if (ogVideo || ogImage) {
+        if (ogVideo) {
           return {
             platform: 'instagram',
-            mediaType: ogVideo ? 'video' : 'image',
-            title: 'Instagram Post',
+            mediaType: 'video',
+            title: ogTitle,
             thumbnail: ogImage || '',
             duration: null,
             quality: 'Original',
             fileSize: null,
-            format: ogVideo ? 'mp4' : 'jpg',
-            sourceUrl: ogVideo || ogImage,
-            images: ogImage ? [{ id: 1, url: ogImage, filename: 'photo_1.jpg' }] : [],
+            format: 'mp4',
+            sourceUrl: ogVideo,
+            images: [],
           };
         }
+
+        const imageResult = buildImageResult(html, ogTitle);
+        if (imageResult) return imageResult;
       } catch (pErr) {
         console.error('Instagram Puppeteer fallback failed:', pErr);
       }

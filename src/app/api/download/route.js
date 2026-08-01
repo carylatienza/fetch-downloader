@@ -21,7 +21,40 @@ export async function GET(req) {
   const downloadId = searchParams.get('id');
   const singleImageUrl = searchParams.get('imageUrl');
   const isPreview = searchParams.get('preview') === 'true';
+  const directUrl = searchParams.get('url');
+  const isDirectStream = searchParams.get('directStream') === 'true';
   const ip = getClientIp(req);
+
+  // Direct video streaming proxy handler for microservice execution
+  if (isDirectStream && directUrl) {
+    if (!trackDownloadStart(ip)) {
+      return NextResponse.json(
+        { success: false, error: { code: 'CONCURRENT_LIMIT', message: 'Too many concurrent downloads. Please wait for one to finish.' } },
+        { status: 429 }
+      );
+    }
+    try {
+      const nodeStream = getStreamWithYtDlp(directUrl, req.signal);
+      if (nodeStream) {
+        nodeStream.on('end', () => trackDownloadEnd(ip));
+        nodeStream.on('error', () => trackDownloadEnd(ip));
+
+        const webStream = Readable.toWeb(nodeStream);
+        const responseHeaders = new Headers({
+          'Content-Type': 'video/mp4',
+          'Content-Disposition': 'attachment; filename="media_file.mp4"',
+          'Cache-Control': 'no-cache',
+        });
+        return new Response(webStream, { headers: responseHeaders });
+      }
+      trackDownloadEnd(ip);
+    } catch (err) {
+      trackDownloadEnd(ip);
+      console.error('Direct stream endpoint error:', err);
+      return new Response(null, { status: 500 });
+    }
+  }
+
 
   // Standalone image preview proxy handler
   if (singleImageUrl && isPreview) {
@@ -128,7 +161,7 @@ export async function GET(req) {
     // Video extraction & streaming via yt-dlp (if binary is available)
     if (session.mediaType === 'video' && targetUrl.includes('http')) {
       try {
-        const nodeStream = getStreamWithYtDlp(targetUrl);
+        const nodeStream = getStreamWithYtDlp(targetUrl, req.signal);
         if (nodeStream) {
           const webStream = Readable.toWeb(nodeStream);
 

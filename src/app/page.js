@@ -58,7 +58,7 @@ export default function Home() {
 
       <main className={styles.main}>
         {/* Hero Section */}
-        <section className={styles.heroSection}>
+        <section className={`${styles.heroSection} ${extractedData ? styles.heroHasPreview : ''}`}>
           <div className={styles.heroInner}>
             <div className="eyebrow-container reveal">
               <div className="eyebrow-line" />
